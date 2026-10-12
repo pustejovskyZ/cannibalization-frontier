@@ -1,0 +1,12 @@
+# Minimum set; pin exact versions with:  python -m pip freeze > requirements_lock.txt
+numpy
+pandas
+scipy
+pyomo
+cma
+matplotlib
+pyarrow        # PECD parquet files
+openpyxl       # xlsx inputs
+pyxlsb         # TYNDP .xlsb outputs (extraction scripts only)
+highspy        # free LP solver (fallback)
+gurobipy       # LP solver used for the reported runs (licence required)

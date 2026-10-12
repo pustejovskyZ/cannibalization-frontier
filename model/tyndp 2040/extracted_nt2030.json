@@ -1,0 +1,57 @@
+{
+ "DE": {
+  "pv": 215002,
+  "wind_on": 115001,
+  "wind_off": 30521,
+  "nuc": 0,
+  "lig": 0,
+  "hc": 0,
+  "gas": 24645,
+  "demand_gwh": 714084,
+  "electro_gwh": 31730
+ },
+ "CZ": {
+  "pv": 11406,
+  "wind_on": 958,
+  "wind_off": 0,
+  "nuc": 4047,
+  "lig": 4746,
+  "hc": 45,
+  "gas": 2488,
+  "demand_gwh": 81521,
+  "electro_gwh": 159
+ },
+ "DK": {
+  "pv": 17744,
+  "wind_on": 7306,
+  "wind_off": 8251,
+  "nuc": 0,
+  "lig": 0,
+  "hc": 0,
+  "gas": 852,
+  "demand_gwh": 45810,
+  "electro_gwh": 16759
+ },
+ "AT": {
+  "pv": 12000,
+  "wind_on": 9000,
+  "wind_off": 0,
+  "nuc": 0,
+  "lig": 0,
+  "hc": 0,
+  "gas": 2880,
+  "demand_gwh": 89597,
+  "electro_gwh": 1094
+ },
+ "NL": {
+  "pv": 59317,
+  "wind_on": 9100,
+  "wind_off": 16542,
+  "nuc": 486,
+  "lig": 0,
+  "hc": 0,
+  "gas": 10099,
+  "demand_gwh": 157043,
+  "electro_gwh": 12255
+ }
+}

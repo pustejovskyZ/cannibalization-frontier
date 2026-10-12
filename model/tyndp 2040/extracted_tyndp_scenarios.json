@@ -1,0 +1,203 @@
+{
+ "de2035": {
+  "DE": {
+   "pv": 299473.0,
+   "wind_on": 141750.0,
+   "wind_off": 21185.0,
+   "ccgt": 14776.0,
+   "ocgt": 1490.0,
+   "gasconv": 149.0,
+   "nuc": 0.0,
+   "lig": 0.0,
+   "hc": 0.0,
+   "demand_gwh": 848091.9,
+   "electro_gwh": 82874.7
+  },
+  "CZ": {
+   "pv": 16687.0,
+   "wind_on": 2538.0,
+   "wind_off": 0.0,
+   "ccgt": 2277.0,
+   "ocgt": 131.0,
+   "gasconv": 0.0,
+   "nuc": 4617.0,
+   "lig": 0.0,
+   "hc": 0.0,
+   "demand_gwh": 91033.3,
+   "electro_gwh": 627.6
+  },
+  "DK": {
+   "pv": 21709.0,
+   "wind_on": 12499.0,
+   "wind_off": 12242.0,
+   "ccgt": 139.0,
+   "ocgt": 692.0,
+   "gasconv": 0.0,
+   "nuc": 0.0,
+   "lig": 0.0,
+   "hc": 0.0,
+   "demand_gwh": 49354.9,
+   "electro_gwh": 52919.0
+  },
+  "AT": {
+   "pv": 40999.0,
+   "wind_on": 22017.0,
+   "wind_off": 0.0,
+   "ccgt": 0.0,
+   "ocgt": 0.0,
+   "gasconv": 0.0,
+   "nuc": 0.0,
+   "lig": 0.0,
+   "hc": 0.0,
+   "demand_gwh": 109668.6,
+   "electro_gwh": 6196.4
+  },
+  "NL": {
+   "pv": 59317.0,
+   "wind_on": 12700.0,
+   "wind_off": 23650.0,
+   "ccgt": 5997.0,
+   "ocgt": 397.0,
+   "gasconv": 0.0,
+   "nuc": 243.0,
+   "lig": 0.0,
+   "hc": 0.0,
+   "demand_gwh": 196514.2,
+   "electro_gwh": 14604.0
+  }
+ },
+ "de2040": {
+  "DE": {
+   "pv": 390327.0,
+   "wind_on": 168500.0,
+   "wind_off": 21723.0,
+   "ccgt": 6173.0,
+   "ocgt": 670.0,
+   "gasconv": 319.0,
+   "nuc": 0.0,
+   "lig": 0.0,
+   "hc": 0.0,
+   "demand_gwh": 939739.1,
+   "electro_gwh": 169365.4
+  },
+  "CZ": {
+   "pv": 18155.0,
+   "wind_on": 3411.0,
+   "wind_off": 0.0,
+   "ccgt": 2527.0,
+   "ocgt": 131.0,
+   "gasconv": 0.0,
+   "nuc": 5187.0,
+   "lig": 0.0,
+   "hc": 0.0,
+   "demand_gwh": 98041.8,
+   "electro_gwh": 5106.4
+  },
+  "DK": {
+   "pv": 35494.0,
+   "wind_on": 12499.0,
+   "wind_off": 14242.0,
+   "ccgt": 10.0,
+   "ocgt": 612.0,
+   "gasconv": 0.0,
+   "nuc": 0.0,
+   "lig": 0.0,
+   "hc": 0.0,
+   "demand_gwh": 47670.3,
+   "electro_gwh": 85658.9
+  },
+  "AT": {
+   "pv": 51999.0,
+   "wind_on": 32939.0,
+   "wind_off": 0.0,
+   "ccgt": 0.0,
+   "ocgt": 0.0,
+   "gasconv": 0.0,
+   "nuc": 0.0,
+   "lig": 0.0,
+   "hc": 0.0,
+   "demand_gwh": 126451.5,
+   "electro_gwh": 36384.6
+  },
+  "NL": {
+   "pv": 86928.0,
+   "wind_on": 15100.0,
+   "wind_off": 33000.0,
+   "ccgt": 3520.0,
+   "ocgt": 393.0,
+   "gasconv": 0.0,
+   "nuc": 0.0,
+   "lig": 0.0,
+   "hc": 0.0,
+   "demand_gwh": 231625.8,
+   "electro_gwh": 61006.5
+  }
+ },
+ "de2050": {
+  "DE": {
+   "pv": 507250.0,
+   "wind_on": 191500.0,
+   "wind_off": 13999.0,
+   "ccgt": 0.0,
+   "ocgt": 0.0,
+   "gasconv": 0.0,
+   "nuc": 0.0,
+   "lig": 0.0,
+   "hc": 0.0,
+   "demand_gwh": 968975.2,
+   "electro_gwh": 347325.9
+  },
+  "CZ": {
+   "pv": 23554.0,
+   "wind_on": 4486.0,
+   "wind_off": 0.0,
+   "ccgt": 2613.0,
+   "ocgt": 131.0,
+   "gasconv": 0.0,
+   "nuc": 3278.0,
+   "lig": 0.0,
+   "hc": 0.0,
+   "demand_gwh": 108135.3,
+   "electro_gwh": 5420.6
+  },
+  "DK": {
+   "pv": 51093.0,
+   "wind_on": 12499.0,
+   "wind_off": 14242.0,
+   "ccgt": 10.0,
+   "ocgt": 612.0,
+   "gasconv": 0.0,
+   "nuc": 0.0,
+   "lig": 0.0,
+   "hc": 0.0,
+   "demand_gwh": 45163.9,
+   "electro_gwh": 119818.1
+  },
+  "AT": {
+   "pv": 101999.0,
+   "wind_on": 41145.0,
+   "wind_off": 0.0,
+   "ccgt": 0.0,
+   "ocgt": 0.0,
+   "gasconv": 0.0,
+   "nuc": 0.0,
+   "lig": 0.0,
+   "hc": 0.0,
+   "demand_gwh": 127809.2,
+   "electro_gwh": 94321.8
+  },
+  "NL": {
+   "pv": 137908.0,
+   "wind_on": 19999.0,
+   "wind_off": 41000.0,
+   "ccgt": 0.0,
+   "ocgt": 0.0,
+   "gasconv": 0.0,
+   "nuc": 0.0,
+   "lig": 0.0,
+   "hc": 0.0,
+   "demand_gwh": 301390.2,
+   "electro_gwh": 84196.0
+  }
+ }
+}
