@@ -8,8 +8,11 @@ stored series are aligned with the model's weather."""
 import json, sys, numpy as np
 from pyxlsb import open_workbook
 import openpyxl
-MC = {'nt2030': '/tmp/mcnt.json', 'de2035': '/tmp/mc2035.json', 'de2040': '/tmp/mc2040.json', 'de2050': '/tmp/mc2050.json'}
-DSRF = {'nt2030': '/tmp/mcnt.json', 'de2035': '/tmp/hmd2035.json', 'de2040': '/tmp/hmd2040.json', 'de2050': '/tmp/hmd2050.json'}
+import os
+# intermediate hourly files written by extract_hourly_*.py (see extract_all.py)
+TMP = os.environ.get('TYNDP_TMP') or os.path.join(os.path.dirname(os.path.abspath(__file__)), '_hourly')
+MC = {k: os.path.join(TMP, v) for k, v in {'nt2030': 'mcnt.json', 'de2035': 'mc2035.json', 'de2040': 'mc2040.json', 'de2050': 'mc2050.json'}.items()}
+DSRF = {k: os.path.join(TMP, v) for k, v in {'nt2030': 'mcnt.json', 'de2035': 'hmd2035.json', 'de2040': 'hmd2040.json', 'de2050': 'hmd2050.json'}.items()}
 SHIFT = {'nt2030': 0, 'de2035': 0, 'de2040': 24, 'de2050': 0}
 # neighbour weights = TYNDP 2030 reference-grid NTC (mean of both directions, MW)
 W = {'DE': {'FR00': 4800, 'CH00': 4300, 'LUG1': 2400, 'PL00': 2500, 'NOS0': 1400, 'UK00': 1400, 'SE04': 1315, 'BE00': 1000},

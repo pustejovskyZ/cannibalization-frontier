@@ -15,7 +15,7 @@ Judgement values that are not mechanical functions of the data (which
 frontier point is called the elbow, probe targets) live in PINS below. An
 empty pin makes the dependent chunk fail on purpose, so build_numbers.py
 writes a red placeholder instead of a stale number."""
-import pandas as pd, numpy as np, os
+import pandas as pd, numpy as np, os, json
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -47,15 +47,54 @@ PINS = {
   ('DE 2050','NL storage $\\times$2','0.720','diagnostic_vf_0.720/diagnostic_frontier.csv','ProbeSevenTwo'),
   ('DE 2050','NL storage $\\times$2','0.800','diagnostic_vf_0.800_nlx2_de2050_080/diagnostic_frontier.csv','FiftyEightZero')],
          'local_rows': 'auto'},
- 'tfall': {'elbow_target_de2040': None, 'probes': None, 'local_rows': 'auto'},
+ 'tfall': {'elbow_target_de2040': 'auto', 'probes': 'auto', 'local_rows': 'auto'},
 }
 def PIN(k):
     v = PINS[PAPER_SET].get(k)
     if k == 'elbow_target_de2040' and os.environ.get('PAPER_PIN_ELBOW'):
         v = float(os.environ['PAPER_PIN_ELBOW'])   # trial value from the shell
+    if v == 'auto' and k == 'probes':
+        v = PLAN()['probes']
     if v is None:
         raise PinMissing(f"PINS['{PAPER_SET}']['{k}'] not set")
     return v
+
+# ---- phase-2 design (weak node, links, probes). Old set: the first campaign's
+# design (Dutch node). tfall: logs/phase2_plan.json written by run_phase2.py,
+# whose rules (phase2_plan.py) also define the elbow ('auto' pins).
+ADJ = {'DE':'German','CZ':'Czech','DK':'Danish','AT':'Austrian','NL':'Dutch'}
+DSM_POT = {'DE':16000.0,'CZ':2000.0,'DK':2000.0,'AT':1600.0,'NL':3000.0}
+NTC_TOTAL_MAX = {'de_cz':5600.0,'de_dk':9100.0,'de_at':11500.0,'de_nl':8000.0,'dk_nl':2700.0,'cz_at':2400.0}
+_PLAN_CACHE = {}
+def PLAN():
+    if 'p' in _PLAN_CACHE: return _PLAN_CACHE['p']
+    if PAPER_SET == 'old':
+        p = {'W':'NL','sto_key':'sto_nl_mw','main_ntc_key':'ntc_de_nl_mw','second_ntc_key':'ntc_dk_nl_mw',
+             'sto_pot':40000.0,'main_max':3000.0,'far_sto_top':80000.0,'far_sto_mid':40000.0,
+             'probes':PINS['old']['probes']}
+    else:
+        f = os.path.join(LOGD, 'phase2_plan.json')
+        if not os.path.exists(f):
+            raise PinMissing('logs/phase2_plan.json not found (written by run_phase2.py)')
+        j = json.load(open(f))
+        W = j['weak_node_de2040']
+        names = {('de2040','w2x','a'):'ProbeSevenNine',('de2040','w2x','b'):'ProbeEightTwo',
+                 ('de2040','ep8','a'):'EpSevenNine',('de2040','ep8','b'):'EpEightTwo',
+                 ('de2050','w2x','a'):'ProbeSevenTwo',('de2050','w2x','b'):'FiftyEightZero'}
+        pr = []
+        for q in j['probes']:
+            kind = q['tag'].split('_')[0]; ab = q['tag'].split('_')[2]
+            var = (q['variant'].replace(' x2', ' $\\times$2'))
+            pr.append(({'de2040':'DE 2040','de2050':'DE 2050'}[q['scenario']], var, f"{q['target']:.3f}",
+                       f"diagnostic_vf_{q['target']:.3f}_{q['tag']}/diagnostic_frontier.csv",
+                       names[(q['scenario'], kind, ab)]))
+        p = {'W':W,'sto_key':j['sto_key'],'main_ntc_key':j['main_ntc_key'],'second_ntc_key':j['second_ntc_key'],
+             'sto_pot':max(j['lens2']['sto']),'main_max':max(j['lens2']['main']),
+             'far_sto_top':max(j['farside']['sto']) if j['farside'] else None,
+             'far_sto_mid':sorted(j['farside']['sto'])[-2] if j['farside'] else None,
+             'probes':pr}
+    _PLAN_CACHE['p'] = p
+    return p
 
 def P(name):
     """Path of an output file for the active paper set. tfall inserts
@@ -124,6 +163,12 @@ def M(name,val,fmt='%.3f'):
 def _elbow_row(d):
     """frontier row of the pinned elbow target (de2040 weakest-link)"""
     t = PIN('elbow_target_de2040')
+    if t == 'auto':                       # Kneedle rule, same code as phase 2
+        import sys as _s; _s.path.insert(0, _PV)
+        from phase2_plan import kneedle
+        i = kneedle(d)
+        if i is None: raise PinMissing('elbow: fewer than two attained points')
+        return i, d.loc[i]
     i = (d['vf_target'] - t).abs().idxmin()
     assert abs(d.loc[i, 'vf_target'] - t) < 1e-3, (t, d.loc[i, 'vf_target'])
     return i, d.loc[i]
@@ -362,11 +407,11 @@ mac2=[]
 probes=PIN('probes')
 prow=[]; pv={}
 for sc,var,t,f,nm in probes:
-    d=pd.read_csv(P(f)); r=d.iloc[-1]; pv[nm]=r
+    d=pd.read_csv(os.path.join(BASE,f)); r=d.iloc[-1]; pv[nm]=r
     M2('vf'+nm, r['vf_min']); M2('prem'+nm, r['premium_bn'], '%.2f')
     hit = 'yes' if r['vf_min']>=float(t)-0.003 else 'no'
     prow.append((sc, var, t, f"{r['vf_min']:.3f}", hit, f"{r['premium_bn']:.2f}",
-                 f"{r['sto_nl_mw']/1000:.0f}"))
+                 f"{r[PLAN()['sto_key']]/1000:.0f}"))
 # ceiling shift per doubling of NL storage, in value-factor points
 _c40=D[('de2040','vf')]; _c50=D[('de2050','vf')]
 _ceil40=max(_c40['vf_min'].max(), 0); _ceil50=max(_c50['vf_min'].max(), 0)
@@ -374,7 +419,7 @@ M2('ceilShiftForty', 100*(pv['ProbeEightTwo']['vf_min']-_ceil40), '%.1f')
 M2('ceilShiftFifty', 100*(pv['FiftyEightZero']['vf_min']-_ceil50), '%.1f')
 with open(os.path.join(OUT,'tab_probes.tex'),'w') as f:
     f.write("\\begin{tabular}{lllcccc}\n\\toprule\n")
-    f.write("Scenario & variant & target & achieved & attained? & $\\Pi$ [bn\\euro/yr] & NL sto.\\ [GW]\\\\\n\\midrule\n")
+    f.write("Scenario & variant & target & achieved & attained? & $\\Pi$ [bn\\euro/yr] & %s sto.\\ [GW]\\\\\n\\midrule\n" % PLAN()['W'])
     for r in prow: f.write(" & ".join(r)+"\\\\\n")
     f.write("\\bottomrule\n\\end{tabular}\n")
 open(os.path.join(OUT,'numbers.tex'),'a').write('\n'.join(mac2)+'\n'); mac2=[]
@@ -382,7 +427,7 @@ open(os.path.join(OUT,'numbers.tex'),'a').write('\n'.join(mac2)+'\n'); mac2=[]
 mac2=[]
 def M2(n_,v,fmt='%.3f'): mac2.append(r'\newcommand{\%s}{%s}'%(n_,fmt%v))
 dvfw=D[('de2040','vfw')]
-M2('nlPvEndVfw', hits(dvfw,'vf_genw')[-1]['vf_pv_NL'])
+M2('nlPvEndVfw', hits(dvfw,'vf_genw')[-1]['vf_pv_'+PLAN()['W']])
 M2('dispBase', D[('de2040','vf')].iloc[0]['vf_genw']-D[('de2040','vf')].iloc[0]['vf_min'])
 _lv=hits(D[('de2040','vf')],'vf_min')[-1]; _lw2=hits(dvfw,'vf_genw')[-1]
 M2('dispEndVf', _lv['vf_genw']-_lv['vf_min']); M2('dispEndVfw', _lw2['vf_genw']-_lw2['vf_min'])
@@ -464,8 +509,10 @@ with open(os.path.join(OUT,'tab_allfront.tex'),'w') as f:
 import re
 def _dec(p):
     raw=open(p,'rb').read()
-    try: return raw.decode('utf-16')
-    except: return raw.decode('utf-8',errors='replace')
+    if raw[:2] in (b'\xff\xfe', b'\xfe\xff') or b'\x00' in raw[:400]:
+        try: return raw.decode('utf-16')
+        except Exception: pass
+    return raw.decode('utf-8',errors='replace')
 def _bopt(f):
     m=re.search(r'B_opt cost ([\d.]+) bn \| VF_min ([\d.]+) \| VF_genw ([\d.]+) \| CR_min ([\d.]+)', _dec(PL(f)))
     return [float(x) for x in m.groups()]
@@ -521,10 +568,15 @@ open(os.path.join(OUT,'numbers.tex'),'a').write('\n'.join(mac3)+'\n')
 d=D[('de2040','vf')]
 xs=d['vf_min'].tolist()
 fig,a=plt.subplots(figsize=(4.6,2.9))
-a.plot(xs,[100*r/40000 for r in d['sto_nl_mw']],'-o',ms=3,lw=1.4,color='#000000',label='NL storage / 40 GW')
-a.plot(xs,[100*r/3000 for r in d['dsm_nl_mw']],'-s',ms=3,lw=1.2,color='#0072B2',label='NL DSM / 3 GW')
-a.plot(xs,[100*r/8000 for r in d['ntc_total_de_nl_mw']],'-^',ms=3,lw=1.2,color='#D55E00',label='DE-NL NTC / 8 GW')
-a.plot(xs,[100*r/2700 for r in d['ntc_total_dk_nl_mw']],'-v',ms=3,lw=1.2,color='#009E73',label='DK-NL NTC / 2.7 GW')
+_pl=PLAN(); _W=_pl['W']; _w=_W.lower()
+a.plot(xs,[100*r/_pl['sto_pot'] for r in d[_pl['sto_key']]],'-o',ms=3,lw=1.4,color='#000000',label=f"{_W} storage / {_pl['sto_pot']/1000:.0f} GW")
+_dk=('dsm_mw' if _W=='DE' else f'dsm_{_w}_mw')
+a.plot(xs,[100*r/DSM_POT[_W] for r in d[_dk]],'-s',ms=3,lw=1.2,color='#0072B2',label=f"{_W} DSM / {DSM_POT[_W]/1000:g} GW")
+for _key,_mk_,_col in ((_pl['main_ntc_key'],'-^','#D55E00'),(_pl['second_ntc_key'],'-v','#009E73')):
+    if not _key: continue
+    _l=_key[4:-3]; _tm=NTC_TOTAL_MAX[_l]
+    a.plot(xs,[100*r/_tm for r in d[f'ntc_total_{_l}_mw']],_mk_,ms=3,lw=1.2,color=_col,
+           label=f"{_l.upper().replace('_','-')} NTC / {_tm/1000:g} GW")
 a.axhline(100,color='gray',lw=0.7,ls='--'); a.axvline(d['vf_min'].max(),color='gray',lw=0.6,ls=':')
 a.set_xlabel(r'achieved $VF_{\min}$'); a.set_ylabel('utilization of potential [%]')
 a.set_ylim(0,110); a.legend(frameon=False,fontsize=7,loc='lower right')
@@ -693,13 +745,15 @@ open(os.path.join(OUT,'numbers.tex'),'a').write('\n'.join(mac6)+'\n'); mac6=[]
 # ---------- S12b: node-level experiments (phase 2 files) ----------
 mac6=[]
 # (b) node-level, near-side (NL storage x link), with binding switch
-g2=_rd('node_factorial_de2040_bopt.csv'); g2=g2[g2.act_ntc_dk_nl_mw==0]
-s2=g2.pivot_table(index='act_sto_nl_mw',columns='act_ntc_de_nl_mw',values='vf_min')
-pv=g2.pivot_table(index='act_sto_nl_mw',columns='act_ntc_de_nl_mw',values='vf_pv_NL')
-de=g2.pivot_table(index='act_sto_nl_mw',columns='act_ntc_de_nl_mw',values='vf_pv_DE')
-M6('nsVfPlateau', s2.loc[40000.0,0.0]); M6('nsNlPvTop', pv.loc[40000.0,0.0]); M6('nsNlPvBase', pv.loc[0.0,0.0])
-M6('nsDePv', de.loc[0.0,0.0]); M6('nsPlateauFrom', 20, '%d')
-Ins={r_: s2.loc[r_,3000.0]-s2.loc[r_,0.0]-s2.loc[0.0,3000.0]+s2.loc[0.0,0.0] for r_ in s2.index if r_>0}
+_pl=PLAN(); _W=_pl['W']; _sk='act_'+_pl['sto_key']; _mk='act_'+_pl['main_ntc_key']; _LM=_pl['main_max']
+g2=_rd('node_factorial_de2040_bopt.csv')
+if _pl['second_ntc_key']: g2=g2[g2['act_'+_pl['second_ntc_key']]==0]
+s2=g2.pivot_table(index=_sk,columns=_mk,values='vf_min')
+pv=g2.pivot_table(index=_sk,columns=_mk,values='vf_pv_'+_W)
+de=g2.pivot_table(index=_sk,columns=_mk,values='vf_pv_DE')
+M6('nsVfPlateau', s2.loc[_pl['sto_pot'],0.0]); M6('nsNlPvTop', pv.loc[_pl['sto_pot'],0.0]); M6('nsNlPvBase', pv.loc[0.0,0.0])
+M6('nsDePv', de.loc[0.0,0.0]); M6('nsPlateauFrom', 20, '%d')   # old-set reading, see audit
+Ins={r_: s2.loc[r_,_LM]-s2.loc[r_,0.0]-s2.loc[0.0,_LM]+s2.loc[0.0,0.0] for r_ in s2.index if r_>0}
 M6('nsIntMin', min(Ins.values())); M6('nsIntMax', max(Ins.values()))
 # (c) frontier locals: reproduction + local interactions
 ck=D[('de2040','vf')]
@@ -709,23 +763,23 @@ _rows=[_hi[0], _elbow_row(ck)[0], _hi[-1]]
 loc={}
 for rw in _rows:
     g3=_rd(f'node_local_de2040_row{rw}.csv')
-    s3=g3.pivot_table(index='req_sto_nl_mw',columns='req_ntc_de_nl_mw',values='vf_min')
+    s3=g3.pivot_table(index='req_'+_pl['sto_key'],columns='req_'+_pl['main_ntc_key'],values='vf_min')
     r_=list(s3.index); c_=list(s3.columns)
     loc[rw]=s3.loc[r_[-1],c_[-1]]-s3.loc[r_[-1],c_[0]]-s3.loc[r_[0],c_[-1]]+s3.loc[r_[0],c_[0]]
     if rw==_rows[0]: M6('vfResolution', abs(s3.loc[0.0,0.0]-ck.loc[rw].vf_min))
-    if rw==_rows[1]: M6('linkLocalElbow', (s3.loc[0.0,c_[-1]]-s3.loc[0.0,c_[0]])/(-c_[0]/1000.0))  # per GW
+    if rw==_rows[1]: M6('linkLocalElbow', (s3.loc[0.0,c_[-1]]-s3.loc[0.0,c_[0]])/((c_[-1]-c_[0])/1000.0))  # per GW
 M6('locIntBottom',loc[_rows[0]]); M6('locIntElbow',loc[_rows[1]]); M6('locIntTop',loc[_rows[2]])
 # (d) far-side test
 for f,tag in [(f'farside_de2040_row{_rows[1]}.csv','Elbow'),('farside_de2040_bopt.csv','Bopt')]:
-    g4=_rd(f); s4=g4.pivot_table(index='act_sto_mw',columns='act_ntc_de_nl_mw',values='vf_min')
-    b4=s4.loc[0.0,0.0]
-    M6('fsLinkAlone'+tag, s4.loc[0.0,3000.0]-b4)
-    M6('fsLinkWithSto'+tag, s4.loc[80000.0,3000.0]-s4.loc[80000.0,0.0])
-    M6('fsIntTop'+tag, s4.loc[80000.0,3000.0]-s4.loc[80000.0,0.0]-s4.loc[0.0,3000.0]+b4)
-    M6('fsIntMid'+tag, s4.loc[40000.0,3000.0]-s4.loc[40000.0,0.0]-s4.loc[0.0,3000.0]+b4)
+    g4=_rd(f); s4=g4.pivot_table(index='act_sto_mw',columns=_mk,values='vf_min')
+    b4=s4.loc[0.0,0.0]; _T=_pl['far_sto_top']; _Mi=_pl['far_sto_mid']
+    M6('fsLinkAlone'+tag, s4.loc[0.0,_LM]-b4)
+    M6('fsLinkWithSto'+tag, s4.loc[_T,_LM]-s4.loc[_T,0.0])
+    M6('fsIntTop'+tag, s4.loc[_T,_LM]-s4.loc[_T,0.0]-s4.loc[0.0,_LM]+b4)
+    M6('fsIntMid'+tag, s4.loc[_Mi,_LM]-s4.loc[_Mi,0.0]-s4.loc[0.0,_LM]+b4)
     if tag=='Elbow':
-        q0=g4[(g4.act_sto_mw==0)&(g4.act_ntc_de_nl_mw==0)].iloc[0]; q1=g4[(g4.act_sto_mw==80000)&(g4.act_ntc_de_nl_mw==0)].iloc[0]; q2=g4[(g4.act_sto_mw==80000)&(g4.act_ntc_de_nl_mw==3000)].iloc[0]
-        M6('fsDePvNoSto', q0['vf_pv_DE']); M6('fsDePvSto', q1['vf_pv_DE']); M6('fsNlPvSto', q1['vf_pv_NL']); M6('fsNlPvStoLink', q2['vf_pv_NL'])
+        q0=g4[(g4.act_sto_mw==0)&(g4[_mk]==0)].iloc[0]; q1=g4[(g4.act_sto_mw==_T)&(g4[_mk]==0)].iloc[0]; q2=g4[(g4.act_sto_mw==_T)&(g4[_mk]==_LM)].iloc[0]
+        M6('fsDePvNoSto', q0['vf_pv_DE']); M6('fsDePvSto', q1['vf_pv_DE']); M6('fsNlPvSto', q1['vf_pv_'+_W]); M6('fsNlPvStoLink', q2['vf_pv_'+_W])
 open(os.path.join(OUT,'numbers.tex'),'a').write('\n'.join(mac6)+'\n')
 print("S12 macros:",len(mac6))
 
@@ -760,18 +814,19 @@ print("S13 macros:",mac13)
 # ---------- S12c: fig_interactions2 (needs S12b) ----------
 # figure: (a) near-side vs far-side interaction; (b) binding switch
 fig,ax=plt.subplots(1,2,figsize=(7.0,2.9))
-g4=_rd(f'farside_de2040_row{_rows[1]}.csv'); s4=g4.pivot_table(index='act_sto_mw',columns='act_ntc_de_nl_mw',values='vf_min'); b4=s4.loc[0.0,0.0]
-xs=[r_/1000 for r_ in s4.index if r_>0]; ys=[s4.loc[r_,3000.0]-s4.loc[r_,0.0]-s4.loc[0.0,3000.0]+b4 for r_ in s4.index if r_>0]
+g4=_rd(f'farside_de2040_row{_rows[1]}.csv'); s4=g4.pivot_table(index='act_sto_mw',columns=_mk,values='vf_min'); b4=s4.loc[0.0,0.0]
+xs=[r_/1000 for r_ in s4.index if r_>0]; ys=[s4.loc[r_,_LM]-s4.loc[r_,0.0]-s4.loc[0.0,_LM]+b4 for r_ in s4.index if r_>0]
+_LN=_pl['main_ntc_key'][4:-3].upper().replace('_','-')
 ax[0].plot(xs,ys,'-o',ms=4,lw=1.5,color='#D55E00',label='far side: German storage')
 xs2=[r_/1000 for r_ in s2.index if r_>0]; ys2=[Ins[r_] for r_ in s2.index if r_>0]
-ax[0].plot(xs2,ys2,'-s',ms=4,lw=1.5,color='#0072B2',label='near side: Dutch storage')
+ax[0].plot(xs2,ys2,'-s',ms=4,lw=1.5,color='#0072B2',label=f'near side: {ADJ[_W]} storage')
 ax[0].axhline(0,color='gray',lw=0.7); ax[0].axhspan(-0.005,0.005,color='gray',alpha=0.15)
-ax[0].set_xlabel('storage added [GW]'); ax[0].set_ylabel('interaction with DE-NL link [VF units]')
+ax[0].set_xlabel('storage added [GW]'); ax[0].set_ylabel(f'interaction with {_LN} link [VF units]')
 ax[0].set_title('(a) which storage complements the link',fontsize=9,loc='left'); ax[0].legend(frameon=False,fontsize=7.5)
 ax[1].plot([r_/1000 for r_ in s2.index],s2[0.0],'-o',ms=4,lw=1.5,color='#000000',label=r'$VF_{\min}$')
-ax[1].plot([r_/1000 for r_ in s2.index],pv[0.0],'--',lw=1.3,color='#000000',label='Dutch solar')
+ax[1].plot([r_/1000 for r_ in s2.index],pv[0.0],'--',lw=1.3,color='#000000',label=f'{ADJ[_W]} solar')
 ax[1].plot([r_/1000 for r_ in s2.index],de[0.0],':',lw=1.3,color='#D55E00',label='German solar')
-ax[1].set_xlabel('Dutch storage [GW], rest at cost optimum'); ax[1].set_ylabel('value factor')
+ax[1].set_xlabel(f'{ADJ[_W]} storage [GW], rest at cost optimum'); ax[1].set_ylabel('value factor')
 ax[1].set_title('(b) the weakest link moves',fontsize=9,loc='left'); ax[1].legend(frameon=False,fontsize=7.5)
 fig.tight_layout(); fig.savefig(os.path.join(OUT,'fig_interactions2.pdf')); plt.close(fig)
 print("OK: gen/ written")

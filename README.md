@@ -34,10 +34,13 @@ model/
   queue_progress.py, notify.py  optional Telegram progress messages
   run_final_baselines.ps1   baselines and battery benchmark
   run_rerun_phase1.ps1      all frontiers and factorial grids (two parallel queues)
+  run_rerun_phase2.ps1      ceiling probes, robustness variants, interaction experiments
+  phase2_plan.py            rules that derive the phase-2 experiments from the frontiers
+  run_phase2.py             phase-2 runner (waits for phase 1, then runs the plan)
   tyndp 2040/
     *.json                  TYNDP 2024 inputs extracted for the five nodes
-    extract_*.py            scripts that produce tyndp_extras.json and
-                            tyndp_borders_dsr.json from the raw TYNDP files
+    extract_all.py          recreates every JSON input from the raw TYNDP files
+    extract_*.py            the individual extraction steps
     PECD/                   PECD 2021.3 subset, five countries, all climate years
 paper/
   make_paper_numbers.py     every number, table and figure of the paper
@@ -73,6 +76,22 @@ All frontiers and factorial grids (several days on 8 cores, two windows):
 .\run_rerun_phase1.ps1 -Queue A
 .\run_rerun_phase1.ps1 -Queue B
 ```
+
+Phase 2 (ceiling probes, robustness variants, interaction experiments, about
+three days). Start it next to phase 1, it waits until phase 1 has finished:
+
+```
+.\run_rerun_phase2.ps1 -Queue A
+.\run_rerun_phase2.ps1 -Queue B
+```
+
+Phase 2 derives its experiments from the phase-1 frontiers by fixed rules
+(`phase2_plan.py`): the elbow of a frontier by the Kneedle rule (Satopää et
+al., 2011), the weak node as the node of the binding value factor at the
+ceiling, probe targets 0.02 and 0.06 above the ceiling, and sweep values as
+fixed fractions of the deployment potentials. The plan is written to
+`model/logs/phase2_plan.json`. `.\run_rerun_phase2.ps1 -Queue B -DryRun`
+prints the commands without running them.
 
 A single frontier by hand, for example DE 2040 with the weakest-link target:
 
@@ -129,18 +148,13 @@ and unpack them into `model/tyndp 2040/`:
 | `EV Modelling Inputs/` | [EV Modelling Inputs](https://2024-data.entsos-tyndp-scenarios.eu/files/scenarios-inputs/EV-Modelling-Inputs.zip) |
 | commodity prices | [Commodity Prices](https://2024-data.entsos-tyndp-scenarios.eu/files/scenarios-inputs/Prices.zip) |
 
-Then:
+Then (about 20 minutes):
 
 ```
 cd "model/tyndp 2040"
-python extract_tyndp_extras.py
-python extract_borders_dsr.py
+python extract_all.py --check     # rebuild into _check/ and compare with the JSON files
+python extract_all.py             # or overwrite the JSON files
 ```
-
-`extracted_tyndp_scenarios.json`, `extracted_nt2030.json` and
-`ev_by_year.json` (installed capacities, demand, electrolysis and EV fleet per
-node) were read from the yearly outputs of the same files and from the EV
-Modelling Inputs.
 
 ## Licence
 
