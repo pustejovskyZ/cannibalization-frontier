@@ -3537,7 +3537,10 @@ def _diagnostic_multi_restart(D, vf_target, max_evals, n_workers,
             continue
         # Use the LAST row (the one matching vf_target, not the baseline).
         last = df_r.iloc[-1]
-        vf_min  = float(last['cr_min'])  # Section 34: target metric is CR
+        # restart selection on the metric the target is set in (VF_min); this
+        # read cr_min before (legacy of the CR target), so the restart with the
+        # lowest cost was chosen whenever every cr_min exceeded the VF target
+        vf_min  = float(last['vf_min']) if 'vf_min' in last.index else float(last['cr_min'])
         premium = float(last['premium_bn'])
         sys_cost = float(last['sys_cost'])
         violation = max(0.0, float(vf_target) - vf_min)

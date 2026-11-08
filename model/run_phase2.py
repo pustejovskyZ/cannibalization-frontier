@@ -120,6 +120,12 @@ def items_for(queue, p):
         it += [probe(pr) for pr in p['probes'] if pr['scenario'] == 'de2040']
         return it
     # ---- queue B ----
+    # factorial grid for NT 2030 (phase 1 ran it for 2035/2040/2050 only); its
+    # all-in corner bounds the NT 2030 ceiling like the other scenarios
+    it.append(('grid nt2030', [PY, 'grid_floor.py', '--scenario', 'nt2030'] + CFG +
+               ['--fracs-sc', '0', '--fracs-dsmev', '0,0.5,1.0',
+                '--out', os.path.join('output', f'grid_floor_5node_nt2030_{S}.csv')], {},
+               ('rows', os.path.join(OUT, f'grid_floor_5node_nt2030_{S}.csv'), 72), 0.6))
     it.append(('robustness baseline noresid', ds('de2040', '--baseline-only', '--no-resid'), {},
                ('log', f'rob_noresid_base_{S}.log', 'B_opt cost'), 0.1))
     it.append(('robustness baseline widep', ds('de2040', '--baseline-only', '--resid-export-price', '0',

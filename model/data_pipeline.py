@@ -314,6 +314,7 @@ def load_representative_weeks(ts_path, di_path=None, node='DE', n_weeks=6, nodes
         weights=weight_dict,
         week_info=week_info,
         n_repr_weeks=n_weeks,
+        climate_year=climate_year,   # S.108: lets tyndp_fixes adapt CY2009-only TYNDP series
         # Kotzur (2018) seasonal-storage linking: chronological 52-week -> rep-week
         # map (week_labels[p] in 0..n_weeks-1) and hours-per-rep-week. Rep week r
         # occupies hours [r*168, r*168+167]. Used by model_builder to thread an

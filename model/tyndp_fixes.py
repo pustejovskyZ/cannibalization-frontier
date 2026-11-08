@@ -117,6 +117,14 @@ def apply(D, scenario, fixes=None):
     nodes = list(D['n'])
     print(f"  ** TYNDP_FIXES={','.join(fixes)} ({scenario}) **")
 
+    # S.108: the TYNDP hourly series (hub availability, neighbour prices) exist
+    # for climate year 2009 only. For other weather years (robustness runs) the
+    # hub output follows the node's own offshore profile of that year, scaled to
+    # TYNDP's annual hub energy, and the border prices keep TYNDP's
+    # month-by-hour-of-day pattern instead of the CY2009 chronology.
+    cy = D.get('climate_year')
+    other_cy = cy is not None and int(cy) != 2009
+
     if 'hubs' in fixes:
         med = {wi['cluster_id']: wi['medoid_week'] for wi in D['week_info']}
         for n in nodes:
@@ -137,6 +145,8 @@ def apply(D, scenario, fixes=None):
                 prof = [min(1.0, k * v) for v in pm]
             assert len(prof) == 52 * 168, len(prof)
             ph = {t: prof[med[t // 168] * 168 + t % 168] for t in H}
+            if other_cy:
+                ph = {t: D['phi_wind_off'][n][t] for t in H}
             targets = [D['node_params'][n]['k_bar_vre']] if n in D.get('node_params', {}) else []
             if n == 'DE' and all(D['k_bar_vre'] is not tt for tt in targets):
                 targets.append(D['k_bar_vre'])
@@ -154,13 +164,15 @@ def apply(D, scenario, fixes=None):
             cov = sum((a - mx) * (b - my) for a, b in zip(xs, ys))
             sx = math.sqrt(sum((a - mx) ** 2 for a in xs)); sy = math.sqrt(sum((b - my) ** 2 for b in ys))
             corr = cov / (sx * sy) if sx > 0 and sy > 0 else 0.0
-            if corr < 0.75:
+            if corr < 0.75 and not other_cy:
                 raise SystemExit(f'hubs {n}: hub profile not aligned with node offshore weather (corr {corr:.2f})')
             D['phi_wind_off'][n] = {t: (k0 * po[t] + hub['mw'] * ph[t]) / k1 for t in H}
             for tt in targets:
                 tt['wind_off'] = k1
             cf_old = sum(W[t] * po[t] for t in H) / wsum
             cf_hub = sum(W[t] * ph[t] for t in H) / wsum
+            if other_cy:
+                print(f"     hubs {n}: CY{cy}: node offshore profile scaled to TYNDP hub energy")
             print(f"     hubs {n}: wind_off {k0/1e3:.1f} -> {k1/1e3:.1f} GW "
                   f"(corr {corr:.2f}; hub CF {cf_hub:.3f} on rep. weeks vs node {cf_old:.3f}; "
                   f"TYNDP hub {hub['twh']:.1f} TWh)")
@@ -285,9 +297,26 @@ def apply(D, scenario, fixes=None):
             pr = bd['price']
             assert len(pr) == 52 * 168
             ser = {t: pr[med[t // 168] * 168 + t % 168] for t in H}
+            if other_cy:
+                import calendar
+                mon = []
+                for d_ in range(365):
+                    m_ = 1
+                    while d_ >= sum(calendar.monthrange(2009, k)[1] for k in range(1, m_ + 1)):
+                        m_ += 1
+                    mon.append(m_)
+                acc = {}
+                for h_, v_ in enumerate(pr):
+                    key = (mon[min(h_ // 24, 364)], h_ % 24)
+                    a_, c_ = acc.get(key, (0.0, 0)); acc[key] = (a_ + v_, c_ + 1)
+                prof_mh = {k_: a_ / c_ for k_, (a_, c_) in acc.items()}
+                ser = {}
+                for t in H:
+                    h_ = med[t // 168] * 168 + t % 168
+                    ser[t] = prof_mh[(mon[min(h_ // 24, 364)], h_ % 24)]
             rd['price_import_series'] = {t: ser[t] + 1.0 for t in H}
             rd['price_export_series'] = {t: ser[t] - 1.0 for t in H}
             mean_rw = sum(W[t] * ser[t] for t in H) / wsum
             rd['price_import'] = mean_rw + 1.0; rd['price_export'] = mean_rw - 1.0
-            print(f"     borders {rn}: hourly TYNDP neighbour price, mean {bd['mean']:.1f} EUR/MWh (rep. weeks {mean_rw:.1f})")
+            print(f"     borders {rn}: {'month-by-hour TYNDP pattern (CY ' + str(cy) + ')' if other_cy else 'hourly TYNDP neighbour price'}, mean {bd['mean']:.1f} EUR/MWh (rep. weeks {mean_rw:.1f})")
     return D

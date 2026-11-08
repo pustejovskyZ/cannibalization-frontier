@@ -12,7 +12,8 @@ value is picked by hand:
   gives the 0.738 point that the paper called the elbow.
 * weak node W of a scenario: node of the binding (lowest) value factor at the
   highest value factor the frontier reaches (the ceiling point).
-* ceiling: highest VF_min reached by any frontier row, attained or not.
+* ceiling: highest VF_min reached by any frontier row, attained or not, or by
+  the factorial grid (all-in corner), whichever is higher.
 * probe targets: ceiling + 0.02 and ceiling + 0.06, rounded up to 0.005.
 * main link of W: its link to DE (the largest link otherwise), second link:
   the other link that touches W.
@@ -104,10 +105,21 @@ def scenario_info(sc, base=OUT, suffix=SUFFIX):
     d = pd.read_csv(frontier_path(sc, 'vf', suffix, base))
     hi = attained(d)
     top = d['vf_min'].astype(float).idxmax()
-    ceil = float(d.loc[top, 'vf_min'])
+    ceil_cma = float(d.loc[top, 'vf_min'])
+    # the factorial grid's all-in corner can lie above the search's best point
+    # (first seen in the rerun: +0.007); the ceiling is the higher of the two
+    gf = os.path.join(base, f'grid_floor_5node_{sc}_{suffix}.csv')
+    ceil_grid = None
+    if os.path.exists(gf):
+        g = pd.read_csv(gf)
+        g = g[g['status'] == 'ok'] if 'status' in g else g
+        if len(g):
+            ceil_grid = float(g['vf_min'].max())
+    ceil = max(ceil_cma, ceil_grid or 0.0)
     w = binding(d.loc[top])[2]
     el = kneedle(d)
-    return d, {'scenario': sc, 'ceiling': ceil, 'weak_node': w,
+    return d, {'scenario': sc, 'ceiling': ceil, 'ceiling_search': ceil_cma, 'ceiling_grid': ceil_grid,
+               'weak_node': w,
                'weak_tech': binding(d.loc[top])[1],
                'elbow_row': None if el is None else int(el),
                'elbow_target': None if el is None else round(float(d.loc[el, 'vf_target']), 4),
