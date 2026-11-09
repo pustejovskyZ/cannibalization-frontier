@@ -1,0 +1,182 @@
+{
+ "de2040": {
+  "scenario": "de2040",
+  "ceiling": 0.7281609711101887,
+  "ceiling_search": 0.7214813351362382,
+  "ceiling_grid": 0.7281609711101887,
+  "weak_node": "NL",
+  "weak_tech": "pv",
+  "elbow_row": 3,
+  "elbow_target": 0.6575,
+  "elbow_vf": 0.6579701691562173,
+  "first_row": 1,
+  "last_row": 5,
+  "probe_targets": [
+   0.75,
+   0.79
+  ]
+ },
+ "de2050": {
+  "scenario": "de2050",
+  "ceiling": 0.6704257024526965,
+  "ceiling_search": 0.6634819457463058,
+  "ceiling_grid": 0.6704257024526965,
+  "weak_node": "DK",
+  "weak_tech": "pv",
+  "elbow_row": 3,
+  "elbow_target": 0.6255,
+  "elbow_vf": 0.6262407322051897,
+  "first_row": 1,
+  "last_row": 4,
+  "probe_targets": [
+   0.695,
+   0.735
+  ]
+ },
+ "weak_node_de2040": "NL",
+ "main_link": [
+  "DE",
+  "NL"
+ ],
+ "second_link": [
+  "DK",
+  "NL"
+ ],
+ "sto_key": "sto_nl_mw",
+ "main_ntc_key": "ntc_de_nl_mw",
+ "second_ntc_key": "ntc_dk_nl_mw",
+ "lens2": {
+  "sto": [
+   0.0,
+   5000.0,
+   10000.0,
+   20000.0,
+   30000.0,
+   40000.0
+  ],
+  "main": [
+   0.0,
+   1500.0,
+   3000.0
+  ],
+  "second": [
+   0.0,
+   2000.0
+  ]
+ },
+ "lens3": [
+  {
+   "row": 1,
+   "sto": [
+    -5000.0,
+    0.0,
+    5000.0
+   ],
+   "main": [
+    0.0,
+    1000.0,
+    2000.0
+   ]
+  },
+  {
+   "row": 3,
+   "sto": [
+    -5000.0,
+    0.0,
+    5000.0
+   ],
+   "main": [
+    0.0,
+    1000.0,
+    2000.0
+   ]
+  },
+  {
+   "row": 5,
+   "sto": [
+    -10000.0,
+    -5000.0,
+    0.0
+   ],
+   "main": [
+    0.0,
+    1000.0,
+    2000.0
+   ]
+  }
+ ],
+ "farside": {
+  "sto": [
+   0.0,
+   20000.0,
+   40000.0,
+   80000.0
+  ],
+  "main": [
+   0.0,
+   1000.0,
+   2000.0,
+   3000.0
+  ],
+  "rows": [
+   3,
+   "bopt"
+  ]
+ },
+ "probes": [
+  {
+   "scenario": "de2040",
+   "variant": "NL storage x2",
+   "target": 0.75,
+   "env": {
+    "CAP_OVERRIDES": "NL.k_bar_sto_p=80000;NL.k_bar_sto_e=320000"
+   },
+   "tag": "w2x_de2040_a_tfall"
+  },
+  {
+   "scenario": "de2040",
+   "variant": "NL storage x2",
+   "target": 0.79,
+   "env": {
+    "CAP_OVERRIDES": "NL.k_bar_sto_p=80000;NL.k_bar_sto_e=320000"
+   },
+   "tag": "w2x_de2040_b_tfall"
+  },
+  {
+   "scenario": "de2050",
+   "variant": "DK storage x2",
+   "target": 0.695,
+   "env": {
+    "CAP_OVERRIDES": "DK.k_bar_sto_p=80000;DK.k_bar_sto_e=320000"
+   },
+   "tag": "w2x_de2050_a_tfall"
+  },
+  {
+   "scenario": "de2050",
+   "variant": "DK storage x2",
+   "target": 0.735,
+   "env": {
+    "CAP_OVERRIDES": "DK.k_bar_sto_p=80000;DK.k_bar_sto_e=320000"
+   },
+   "tag": "w2x_de2050_b_tfall"
+  },
+  {
+   "scenario": "de2040",
+   "variant": "8-h storage",
+   "target": 0.75,
+   "env": {
+    "STO_EP_RATIO": "8"
+   },
+   "tag": "ep8_de2040_a_tfall"
+  },
+  {
+   "scenario": "de2040",
+   "variant": "8-h storage",
+   "target": 0.79,
+   "env": {
+    "STO_EP_RATIO": "8"
+   },
+   "tag": "ep8_de2040_b_tfall"
+  }
+ ]
+}

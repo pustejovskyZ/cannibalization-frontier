@@ -3,7 +3,7 @@
 Code and data for the paper "Mitigating, not eliminating: the cost frontier of
 renewable cannibalization in interconnected power markets" by Zdeněk
 Pustějovský, Prague University of Economics and Business
-(zdenek.pustejovsky@vse.cz). Manuscript under preparation.
+(zdenek.pustejovsky@vse.cz). Submitted to Energy Economics.
 
 The model traces least-cost frontiers of the renewable value factor. For
 every target level it finds the cheapest portfolio of battery storage,
@@ -111,6 +111,14 @@ set PAPER_SET=tfall
 python build_numbers.py
 ```
 
+The model results that the paper is built from are included
+(`model/output/` and `model/logs/`: the eight frontiers, the four factorial
+grids, the node-level and border experiments, the ceiling probes, the TYNDP
+battery benchmark and the robustness runs). `build_numbers.py` therefore
+reproduces every number, table and figure of the paper (into `paper/gen/`)
+in about a minute without re-running the model. Re-running the model
+overwrites these files.
+
 Telegram messages are sent only if the environment variables
 `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` are set.
 
@@ -163,4 +171,5 @@ Code: MIT (see `LICENSE`). Data: see the table above.
 ## Citation
 
 Pustějovský, Z. (2026). Mitigating, not eliminating: the cost frontier of
-renewable cannibalization in interconnected power markets. Manuscript.
+renewable cannibalization in interconnected power markets. Submitted to
+Energy Economics.

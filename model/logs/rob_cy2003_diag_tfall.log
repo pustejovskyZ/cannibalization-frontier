@@ -1,0 +1,611 @@
+============================================================
+  DIRECTED SEARCH v11 (CMA-ES, 5-node (DE+CZ+DK+AT+NL))
+============================================================
+
+[1/4] Loading data (12 representative weeks, nodes=['DE', 'CZ', 'DK', 'AT', 'NL'])...
+  Loading time series from <project>\time_series.xlsx...
+  Nodes: ['DE', 'CZ', 'DK', 'AT', 'NL']
+  PECD climate year 2003: VRE CF replaced (PV/onshore/offshore) for ['DE', 'CZ', 'DK', 'AT', 'NL']; demand shape replaced for ['DE', 'CZ', 'DK', 'AT', 'NL']
+  Clustering 52 weeks into 12 representative weeks (k-medoids)...
+  Cluster sizes: [5, 5, 2, 4, 1, 3, 13, 6, 6, 2, 2, 3] (total=52 weeks)
+  Total weighted hours: 8736 (real: 8760)
+    Week 0: medoid=week 3, size=5, demand=68,361 MW, PV=0.028, Wind=0.418
+    Week 1: medoid=week 5, size=5, demand=69,885 MW, PV=0.056, Wind=0.145
+    Week 2: medoid=week 8, size=2, demand=66,611 MW, PV=0.083, Wind=0.124
+    Week 3: medoid=week 13, size=4, demand=63,028 MW, PV=0.143, Wind=0.326
+    Week 4: medoid=week 17, size=1, demand=59,422 MW, PV=0.177, Wind=0.346
+    Week 5: medoid=week 18, size=3, demand=58,889 MW, PV=0.165, Wind=0.099
+    Week 6: medoid=week 31, size=13, demand=60,015 MW, PV=0.195, Wind=0.082
+    Week 7: medoid=week 32, size=6, demand=60,652 MW, PV=0.160, Wind=0.218
+    Week 8: medoid=week 41, size=6, demand=65,208 MW, PV=0.086, Wind=0.140
+    Week 9: medoid=week 43, size=2, demand=62,028 MW, PV=0.040, Wind=0.377
+    Week 10: medoid=week 47, size=2, demand=66,710 MW, PV=0.025, Wind=0.212
+    Week 11: medoid=week 50, size=3, demand=68,924 MW, PV=0.027, Wind=0.407
+  DK H2 quota: 5.0 TWh/yr (Tier 1 #1)
+  DK residual interconnection: 5450 MW to Nordic (NO+SE+UK)
+  AT residual interconnection: 2075 MW to Alpine (CH+IT)
+  NL residual interconnection: 5100 MW to BE+NO+UK
+  Transmission: DE_CZ link, NTC=2600 MW (fixed)
+  Transmission: DE_DK link, NTC=4100 MW (fixed)
+  Transmission: DE_AT link, NTC=7500 MW (fixed)
+  Transmission: DE_NL link, NTC=5000 MW (fixed)
+  Transmission: DK_NL link, NTC=700 MW (fixed)
+  Transmission: CZ_AT link, NTC=900 MW (fixed)
+  DE residual interconnection: 19800 MW to rest-of-Europe (investable to 32800; export 20 / import 75 EUR/MWh)
+  [scenario] Distributed Energy 2040 applied (corrected VRE incl RETE; DE PV=390 GW; tau=123.0; year-specific DEA costs)
+  ** TYNDP_FIXES=hubs,hydro,other,h2,gas,dsr,pots,fuel,oil,borders (de2040) **
+     hubs DE: CY2003: node offshore profile scaled to TYNDP hub energy
+     hubs DE: wind_off 21.7 -> 62.9 GW (corr 0.99; hub CF 0.504 on rep. weeks vs node 0.408; TYNDP hub 195.7 TWh)
+     hubs DK: CY2003: node offshore profile scaled to TYNDP hub energy
+     hubs DK: wind_off 14.2 -> 28.2 GW (corr 0.97; hub CF 0.530 on rep. weeks vs node 0.397; TYNDP hub 72.3 TWh)
+     hubs NL: CY2003: node offshore profile scaled to TYNDP hub energy
+     hubs NL: wind_off 33.0 -> 38.0 GW (corr 0.99; hub CF 0.500 on rep. weeks vs node 0.408; TYNDP hub 23.5 TWh)
+     hydro DE: turbine 11.5 GW, pump 10.6 GW, energy 202 GWh, inflow 0.7 TWh
+     hydro CZ: turbine 1.9 GW, pump 1.3 GW, energy 94 GWh, inflow 1.0 TWh
+     hydro AT: turbine 12.5 GW, pump 7.9 GW, energy 2394 GWh, inflow 19.9 TWh
+     other DE: flat 3.32 GW (29.1 TWh)
+     other CZ: flat 0.47 GW (4.1 TWh)
+     other DK: flat 0.24 GW (2.1 TWh)
+     other AT: flat 0.61 GW (5.4 TWh)
+     other NL: flat 0.26 GW (2.3 TWh)
+     h2: H2 price 58.4 EUR/MWh_H2 -> 101 EUR/MWh_el; DE 25.4 GW, AT 3.3 GW, NL 9.7 GW
+     gas existing: DE 6.5+0.7 GW, CZ 2.5+0.1 GW, DK 0.0+0.6 GW, AT 0.0+0.0 GW, NL 3.5+0.4 GW
+     fuel: DE residual import price -> 84.8 EUR/MWh (= CCGT cost)
+     fuel: gas blend 10.44 EUR/GJ, fossil 35%; CCGT 76 -> 85, OCGT 113 -> 126 EUR/MWh (fuel+CO2)
+     dsr bands (de2040): 10%@60, 26%@110, 65%@300
+     dsr: DE 20.9 GW, AT 0.7 GW, NL 3.9 GW
+     oil: DK 0.75 GW @ 99 EUR/MWh fuel
+     borders DK: month-by-hour TYNDP pattern (CY 2003), mean 46.2 EUR/MWh (rep. weeks 47.5)
+     borders AT: month-by-hour TYNDP pattern (CY 2003), mean 58.4 EUR/MWh (rep. weeks 59.6)
+     borders NL: month-by-hour TYNDP pattern (CY 2003), mean 51.1 EUR/MWh (rep. weeks 52.5)
+     borders DE: month-by-hour TYNDP pattern (CY 2003), mean 52.0 EUR/MWh (rep. weeks 53.5)
+  [ev-2040] DE: K_ev=282.0 GW, E=3.2 TWh, drive=84.2 TWh/yr
+  [ev-2040] CZ: K_ev=18.4 GW, E=0.2 TWh, drive=6.3 TWh/yr
+  [ev-2040] DK: K_ev=15.2 GW, E=0.2 TWh, drive=7.1 TWh/yr
+  [ev-2040] AT: K_ev=35.5 GW, E=0.4 TWh, drive=9.5 TWh/yr
+  [ev-2040] NL: K_ev=47.5 GW, E=0.5 TWh, drive=19.1 TWh/yr
+
+  ** --demand-2040: scaling base demand to TYNDP DE2040 final-demand totals (S.61) **
+  [demand-2040] DE: 556.5 -> 855.5 TWh/yr (x1.537)
+  [demand-2040] CZ: 71.7 -> 91.7 TWh/yr (x1.279)
+  [demand-2040] DK: 43.2 -> 40.6 TWh/yr (x0.940)
+  [demand-2040] AT: 73.6 -> 117.0 TWh/yr (x1.590)
+  [demand-2040] NL: 137.0 -> 212.5 TWh/yr (x1.551)
+
+  ** --h2-2040: per-node H2 quota = TYNDP DE2040 electrolyser x eta (S.61) [TWh H2]: DE=118.6, CZ=3.6, DK=60.0, AT=25.5, NL=42.7 ** (DK is a TYNDP H2-export hub -> large flexible load)
+
+  EV capacity cap: 40,000 MW (default)
+
+  H2 demand target: 20 TWh_H2 (active only when P2G > 0)
+
+[2/2] DIAGNOSTIC MODE — single VF target = 0.657, budget = 2000 evals, workers = 4 (process mode), restarts = 3
+  Sensitivity tag: rob_cy2003_tfall
+  (skipping monotone + validation; focus on one solve)
+
+  ===== Restart 1/3 (seed=42) =====
+  Solver: Gurobi (APPSI persistent)
+  CZ: high-VRE node (ratio=2.0×), full 4D outer search (sto/P2G/DSM/EV)
+  DK: high-VRE node (ratio=15.9×), full 4D outer search (sto/P2G/DSM/EV)
+  AT: high-VRE node (ratio=6.3×), full 4D outer search (sto/P2G/DSM/EV)
+  NL: high-VRE node (ratio=5.7×), full 4D outer search (sto/P2G/DSM/EV)
+  NTC DE_CZ: outer search dim, fixed=2.6 GW, investable up to +3.0 GW (max total=5.6 GW)
+  NTC DE_DK: outer search dim, fixed=4.1 GW, investable up to +5.0 GW (max total=9.1 GW)
+  NTC DE_AT: outer search dim, fixed=7.5 GW, investable up to +4.0 GW (max total=11.5 GW)
+  NTC DE_NL: outer search dim, fixed=5.0 GW, investable up to +3.0 GW (max total=8.0 GW)
+  NTC DK_NL: outer search dim, fixed=0.7 GW, investable up to +2.0 GW (max total=2.7 GW)
+  NTC CZ_AT: outer search dim, fixed=0.9 GW, investable up to +1.5 GW (max total=2.4 GW)
+  Total outer search dimensions: 16
+  DE VRE fixed [GW]: PV=390.3, Won=168.5, Woff=62.9
+  CZ VRE fixed [GW]: PV=18.2, Won=3.4, Woff=0.0
+  DK VRE fixed [GW]: PV=35.5, Won=12.5, Woff=28.2
+  AT VRE fixed [GW]: PV=52.0, Won=32.9, Woff=0.0
+  NL VRE fixed [GW]: PV=86.9, Won=15.1, Woff=38.0
+  Min feasible P2G (DE) for H2: 20,361 MW
+  Min feasible DK P2G for H2: 10,300 MW
+  P2G ENDOGENOUS: K_sc LP-chosen at ['DE', 'CZ', 'DK', 'AT', 'NL'] (floored by H2 quota); sc dims removed from outer search
+  [solve timing] baseline B_opt LP 116.5s (gurobi, persistent); ~1-5 s on Gurobi.
+
+  COST-OPTIMAL BASELINE B_opt (VRE fixed, flexibility LP-optimal):
+    System cost:  78.931 bn EUR
+    DE: CR_pv=1.092(VF=0.601), CR_wind_on=0.999(VF=0.994), CR_wind_off=1.193(VF=0.993)
+    CZ: CR_pv=1.512(VF=0.611), CR_wind_on=1.360(VF=1.063), CR_wind_off=0.000(VF=0.000)
+    DK: CR_pv=0.850(VF=0.638), CR_wind_on=0.687(VF=0.843), CR_wind_off=0.735(VF=0.902)
+    AT: CR_pv=1.443(VF=0.650), CR_wind_on=1.185(VF=0.992), CR_wind_off=0.000(VF=0.000)
+    NL: CR_pv=1.225(VF=0.575), CR_wind_on=1.054(VF=1.017), CR_wind_off=1.038(VF=1.025)
+    Optimization target = VF_min = 0.5748
+    (CR_min=0.6871, VF_min=0.5748; both always reported)
+
+  --- Target VF_min >= 0.657 ---
+  [process mode] Spawning 4 worker processes (each builds its own LPOracle, ~30-60 s × 4 one-time)...
+  [gen 1] dispatching 24/24 evals to 4 worker processes (countevals=0, cache_hits=0)
+  [solve timing] first eval LP 74.1s (gurobi; incl. ONE-TIME persistent build -- later solves are faster).
+  [solve timing] first eval LP 74.9s (gurobi; incl. ONE-TIME persistent build -- later solves are faster).
+  [solve timing] first eval LP 69.7s (gurobi; incl. ONE-TIME persistent build -- later solves are faster).
+  [solve timing] first eval LP 73.8s (gurobi; incl. ONE-TIME persistent build -- later solves are faster).
+  [solve timing] STEADY-STATE LP 12.8s total, solver 18.9s, my-overhead -6.1s (gurobi, persistent). Frontier runtime ~ total x evals.
+  [solve timing] STEADY-STATE LP 34.9s total, solver 19.6s, my-overhead 15.3s (gurobi, persistent). Frontier runtime ~ total x evals.
+  [solve timing] STEADY-STATE LP 33.1s total, solver 18.8s, my-overhead 14.3s (gurobi, persistent). Frontier runtime ~ total x evals.
+  [solve timing] STEADY-STATE LP 36.9s total, solver 21.2s, my-overhead 15.8s (gurobi, persistent). Frontier runtime ~ total x evals.
+  [SLOW SOLVE #1] LP took 33s (> 30s, gurobi).
+  [SLOW SOLVE #1] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #1] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #1] LP took 37s (> 30s, gurobi).
+  [SLOW SOLVE #2] LP took 33s (> 30s, gurobi).
+  [SLOW SOLVE #2] LP took 34s (> 30s, gurobi).
+  [SLOW SOLVE #2] LP took 36s (> 30s, gurobi).
+  [SLOW SOLVE #2] LP took 34s (> 30s, gurobi).
+  [SLOW SOLVE #3] LP took 38s (> 30s, gurobi).
+  [SLOW SOLVE #3] LP took 34s (> 30s, gurobi).
+  [SLOW SOLVE #3] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #3] LP took 36s (> 30s, gurobi).
+  [gen 2] dispatching 24/24 evals to 4 worker processes (countevals=24, cache_hits=0)
+  [gen 3] dispatching 24/24 evals to 4 worker processes (countevals=48, cache_hits=0)
+  [gen 4] dispatching 24/24 evals to 4 worker processes (countevals=72, cache_hits=0)
+  [gen 5] dispatching 24/24 evals to 4 worker processes (countevals=96, cache_hits=0)
+  [gen 6] dispatching 24/24 evals to 4 worker processes (countevals=120, cache_hits=0)
+  [gen 7] dispatching 24/24 evals to 4 worker processes (countevals=144, cache_hits=0)
+  [gen 8] dispatching 24/24 evals to 4 worker processes (countevals=168, cache_hits=0)
+  [gen 9] dispatching 24/24 evals to 4 worker processes (countevals=192, cache_hits=0)
+  [gen 10] dispatching 24/24 evals to 4 worker processes (countevals=216, cache_hits=0)
+  [gen 11] dispatching 24/24 evals to 4 worker processes (countevals=240, cache_hits=0)
+  [gen 12] dispatching 24/24 evals to 4 worker processes (countevals=264, cache_hits=0)
+  [gen 13] dispatching 24/24 evals to 4 worker processes (countevals=288, cache_hits=0)
+  [gen 14] dispatching 24/24 evals to 4 worker processes (countevals=312, cache_hits=0)
+  [gen 15] dispatching 24/24 evals to 4 worker processes (countevals=336, cache_hits=0)
+  [gen 16] dispatching 24/24 evals to 4 worker processes (countevals=360, cache_hits=0)
+  [gen 17] dispatching 24/24 evals to 4 worker processes (countevals=384, cache_hits=0)
+  [gen 18] dispatching 24/24 evals to 4 worker processes (countevals=408, cache_hits=0)
+  [SLOW SOLVE #100] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #100] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #100] LP took 58s (> 30s, gurobi).
+  [SLOW SOLVE #100] LP took 51s (> 30s, gurobi).
+  [gen 19] dispatching 24/24 evals to 4 worker processes (countevals=432, cache_hits=0)
+  [gen 20] dispatching 24/24 evals to 4 worker processes (countevals=456, cache_hits=0)
+  [gen 21] dispatching 24/24 evals to 4 worker processes (countevals=480, cache_hits=0)
+  [gen 22] dispatching 24/24 evals to 4 worker processes (countevals=504, cache_hits=0)
+  [gen 23] dispatching 24/24 evals to 4 worker processes (countevals=528, cache_hits=0)
+  [gen 24] dispatching 24/24 evals to 4 worker processes (countevals=552, cache_hits=0)
+  [gen 25] dispatching 24/24 evals to 4 worker processes (countevals=576, cache_hits=0)
+  [gen 26] dispatching 24/24 evals to 4 worker processes (countevals=600, cache_hits=0)
+  [gen 27] dispatching 24/24 evals to 4 worker processes (countevals=624, cache_hits=0)
+  [gen 28] dispatching 24/24 evals to 4 worker processes (countevals=648, cache_hits=0)
+  [gen 29] dispatching 24/24 evals to 4 worker processes (countevals=672, cache_hits=0)
+  [gen 30] dispatching 24/24 evals to 4 worker processes (countevals=696, cache_hits=0)
+  [gen 31] dispatching 24/24 evals to 4 worker processes (countevals=720, cache_hits=0)
+  [gen 32] dispatching 24/24 evals to 4 worker processes (countevals=744, cache_hits=0)
+  [gen 33] dispatching 24/24 evals to 4 worker processes (countevals=768, cache_hits=0)
+  [gen 34] dispatching 24/24 evals to 4 worker processes (countevals=792, cache_hits=0)
+  [SLOW SOLVE #200] LP took 33s (> 30s, gurobi).
+  [gen 35] dispatching 24/24 evals to 4 worker processes (countevals=816, cache_hits=0)
+  [SLOW SOLVE #200] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #200] LP took 49s (> 30s, gurobi).
+  [SLOW SOLVE #200] LP took 34s (> 30s, gurobi).
+  [gen 36] dispatching 24/24 evals to 4 worker processes (countevals=840, cache_hits=0)
+  [gen 37] dispatching 24/24 evals to 4 worker processes (countevals=864, cache_hits=0)
+  [gen 38] dispatching 24/24 evals to 4 worker processes (countevals=888, cache_hits=0)
+  [gen 39] dispatching 24/24 evals to 4 worker processes (countevals=912, cache_hits=0)
+  [gen 40] dispatching 24/24 evals to 4 worker processes (countevals=936, cache_hits=0)
+  [gen 41] dispatching 24/24 evals to 4 worker processes (countevals=960, cache_hits=0)
+  [gen 42] dispatching 24/24 evals to 4 worker processes (countevals=984, cache_hits=0)
+  [gen 43] dispatching 24/24 evals to 4 worker processes (countevals=1008, cache_hits=0)
+  [gen 44] dispatching 24/24 evals to 4 worker processes (countevals=1032, cache_hits=0)
+  [gen 45] dispatching 24/24 evals to 4 worker processes (countevals=1056, cache_hits=0)
+  [gen 46] dispatching 24/24 evals to 4 worker processes (countevals=1080, cache_hits=0)
+  [gen 47] dispatching 24/24 evals to 4 worker processes (countevals=1104, cache_hits=0)
+  [gen 48] dispatching 24/24 evals to 4 worker processes (countevals=1128, cache_hits=0)
+  [gen 49] dispatching 24/24 evals to 4 worker processes (countevals=1152, cache_hits=0)
+  [gen 50] dispatching 24/24 evals to 4 worker processes (countevals=1176, cache_hits=0)
+  [gen 51] dispatching 24/24 evals to 4 worker processes (countevals=1200, cache_hits=0)
+  [gen 52] dispatching 24/24 evals to 4 worker processes (countevals=1224, cache_hits=0)
+  [SLOW SOLVE #300] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #300] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #300] LP took 31s (> 30s, gurobi).
+  [gen 53] dispatching 24/24 evals to 4 worker processes (countevals=1248, cache_hits=0)
+  [SLOW SOLVE #300] LP took 38s (> 30s, gurobi).
+  [gen 54] dispatching 24/24 evals to 4 worker processes (countevals=1272, cache_hits=0)
+  [gen 55] dispatching 24/24 evals to 4 worker processes (countevals=1296, cache_hits=0)
+  [gen 56] dispatching 24/24 evals to 4 worker processes (countevals=1320, cache_hits=0)
+  [gen 57] dispatching 24/24 evals to 4 worker processes (countevals=1344, cache_hits=0)
+  [gen 58] dispatching 24/24 evals to 4 worker processes (countevals=1368, cache_hits=0)
+  [gen 59] dispatching 24/24 evals to 4 worker processes (countevals=1392, cache_hits=0)
+  [gen 60] dispatching 24/24 evals to 4 worker processes (countevals=1416, cache_hits=0)
+  [gen 61] dispatching 24/24 evals to 4 worker processes (countevals=1440, cache_hits=0)
+  [gen 62] dispatching 24/24 evals to 4 worker processes (countevals=1464, cache_hits=0)
+  [gen 63] dispatching 24/24 evals to 4 worker processes (countevals=1488, cache_hits=0)
+  [gen 64] dispatching 24/24 evals to 4 worker processes (countevals=1512, cache_hits=0)
+  [gen 65] dispatching 24/24 evals to 4 worker processes (countevals=1536, cache_hits=0)
+  [gen 66] dispatching 24/24 evals to 4 worker processes (countevals=1560, cache_hits=0)
+  [gen 67] dispatching 24/24 evals to 4 worker processes (countevals=1584, cache_hits=0)
+  [gen 68] dispatching 24/24 evals to 4 worker processes (countevals=1608, cache_hits=0)
+  [gen 69] dispatching 24/24 evals to 4 worker processes (countevals=1632, cache_hits=0)
+  [gen 70] dispatching 24/24 evals to 4 worker processes (countevals=1656, cache_hits=0)
+  [SLOW SOLVE #400] LP took 36s (> 30s, gurobi).
+  [SLOW SOLVE #400] LP took 34s (> 30s, gurobi).
+  [SLOW SOLVE #400] LP took 36s (> 30s, gurobi).
+  [gen 71] dispatching 24/24 evals to 4 worker processes (countevals=1680, cache_hits=0)
+  [SLOW SOLVE #400] LP took 36s (> 30s, gurobi).
+  [gen 72] dispatching 24/24 evals to 4 worker processes (countevals=1704, cache_hits=0)
+  [gen 73] dispatching 24/24 evals to 4 worker processes (countevals=1728, cache_hits=0)
+  [gen 74] dispatching 24/24 evals to 4 worker processes (countevals=1752, cache_hits=0)
+  [gen 75] dispatching 24/24 evals to 4 worker processes (countevals=1776, cache_hits=0)
+  [gen 76] dispatching 24/24 evals to 4 worker processes (countevals=1800, cache_hits=0)
+  [gen 77] dispatching 24/24 evals to 4 worker processes (countevals=1824, cache_hits=0)
+  [gen 78] dispatching 24/24 evals to 4 worker processes (countevals=1848, cache_hits=0)
+  [gen 79] dispatching 24/24 evals to 4 worker processes (countevals=1872, cache_hits=0)
+  [gen 80] dispatching 24/24 evals to 4 worker processes (countevals=1896, cache_hits=0)
+  [gen 81] dispatching 24/24 evals to 4 worker processes (countevals=1920, cache_hits=0)
+  [gen 82] dispatching 24/24 evals to 4 worker processes (countevals=1944, cache_hits=0)
+  [gen 83] dispatching 24/24 evals to 4 worker processes (countevals=1968, cache_hits=0)
+  [gen 84] dispatching 24/24 evals to 4 worker processes (countevals=1992, cache_hits=0)
+    Found: sto_mw=32,539, dsm_mw=15,829, sto_cz_mw=675, dsm_cz_mw=1,095, sto_dk_mw=3,132, dsm_dk_mw=894, sto_at_mw=5,514, dsm_at_mw=738, sto_nl_mw=27,457, dsm_nl_mw=2,981, ntc_de_cz_mw=170, ntc_de_dk_mw=24, ntc_de_at_mw=27, ntc_de_nl_mw=298, ntc_dk_nl_mw=55, ntc_cz_at_mw=154, ntc_total_de_cz_mw=2,770, ntc_total_de_dk_mw=4,124, ntc_total_de_at_mw=7,527, ntc_total_de_nl_mw=5,298, ntc_total_dk_nl_mw=755, ntc_total_cz_at_mw=1,054
+    DE: VF_pv=0.6581, VF_wind_on=0.9847, VF_wind_off=0.9794
+    CZ: VF_pv=0.6665, VF_wind_on=1.0532, VF_wind_off=0.0000
+    DK: VF_pv=0.7068, VF_wind_on=0.8037, VF_wind_off=0.8793
+    AT: VF_pv=0.7046, VF_wind_on=0.9773, VF_wind_off=0.0000
+    NL: VF_pv=0.6585, VF_wind_on=1.0012, VF_wind_off=1.0134
+    Target VF_min=0.6581, Premium=0.424 bn EUR (vs B_opt)
+    LP solves: 2016, Time: 18959.1s
+    ** CMA: 2016/2000 evals [BUDGET EXHAUSTED] [4 workers] — raise max_evals to improve
+
+  TOTAL LP SOLVES: 1901
+
+  MARGINAL COSTS (dPremium/dVF):
+    VF 0.575 -> 0.658: +0.05 bn EUR per 0.01 VF = +5.09 bn EUR per 1.0 VF
+  [restart 1] VF_min=0.6602, premium=0.424 bn, penalised=7.9355e+10
+
+  ===== Restart 2/3 (seed=43) =====
+  Solver: Gurobi (APPSI persistent)
+  CZ: high-VRE node (ratio=2.0×), full 4D outer search (sto/P2G/DSM/EV)
+  DK: high-VRE node (ratio=15.9×), full 4D outer search (sto/P2G/DSM/EV)
+  AT: high-VRE node (ratio=6.3×), full 4D outer search (sto/P2G/DSM/EV)
+  NL: high-VRE node (ratio=5.7×), full 4D outer search (sto/P2G/DSM/EV)
+  NTC DE_CZ: outer search dim, fixed=2.6 GW, investable up to +3.0 GW (max total=5.6 GW)
+  NTC DE_DK: outer search dim, fixed=4.1 GW, investable up to +5.0 GW (max total=9.1 GW)
+  NTC DE_AT: outer search dim, fixed=7.5 GW, investable up to +4.0 GW (max total=11.5 GW)
+  NTC DE_NL: outer search dim, fixed=5.0 GW, investable up to +3.0 GW (max total=8.0 GW)
+  NTC DK_NL: outer search dim, fixed=0.7 GW, investable up to +2.0 GW (max total=2.7 GW)
+  NTC CZ_AT: outer search dim, fixed=0.9 GW, investable up to +1.5 GW (max total=2.4 GW)
+  Total outer search dimensions: 16
+  DE VRE fixed [GW]: PV=390.3, Won=168.5, Woff=62.9
+  CZ VRE fixed [GW]: PV=18.2, Won=3.4, Woff=0.0
+  DK VRE fixed [GW]: PV=35.5, Won=12.5, Woff=28.2
+  AT VRE fixed [GW]: PV=52.0, Won=32.9, Woff=0.0
+  NL VRE fixed [GW]: PV=86.9, Won=15.1, Woff=38.0
+  Min feasible P2G (DE) for H2: 20,361 MW
+  Min feasible DK P2G for H2: 10,300 MW
+  P2G ENDOGENOUS: K_sc LP-chosen at ['DE', 'CZ', 'DK', 'AT', 'NL'] (floored by H2 quota); sc dims removed from outer search
+  [solve timing] baseline B_opt LP 117.0s (gurobi, persistent); ~1-5 s on Gurobi.
+
+  COST-OPTIMAL BASELINE B_opt (VRE fixed, flexibility LP-optimal):
+    System cost:  78.931 bn EUR
+    DE: CR_pv=1.092(VF=0.601), CR_wind_on=0.999(VF=0.994), CR_wind_off=1.193(VF=0.993)
+    CZ: CR_pv=1.512(VF=0.611), CR_wind_on=1.360(VF=1.063), CR_wind_off=0.000(VF=0.000)
+    DK: CR_pv=0.850(VF=0.638), CR_wind_on=0.687(VF=0.843), CR_wind_off=0.735(VF=0.902)
+    AT: CR_pv=1.443(VF=0.650), CR_wind_on=1.185(VF=0.992), CR_wind_off=0.000(VF=0.000)
+    NL: CR_pv=1.225(VF=0.575), CR_wind_on=1.054(VF=1.017), CR_wind_off=1.038(VF=1.025)
+    Optimization target = VF_min = 0.5748
+    (CR_min=0.6871, VF_min=0.5748; both always reported)
+
+  --- Target VF_min >= 0.657 ---
+  [process mode] Spawning 4 worker processes (each builds its own LPOracle, ~30-60 s × 4 one-time)...
+  [gen 1] dispatching 24/24 evals to 4 worker processes (countevals=0, cache_hits=0)
+  [solve timing] first eval LP 72.1s (gurobi; incl. ONE-TIME persistent build -- later solves are faster).
+  [solve timing] first eval LP 73.4s (gurobi; incl. ONE-TIME persistent build -- later solves are faster).
+  [solve timing] first eval LP 67.8s (gurobi; incl. ONE-TIME persistent build -- later solves are faster).
+  [solve timing] first eval LP 73.8s (gurobi; incl. ONE-TIME persistent build -- later solves are faster).
+  [solve timing] STEADY-STATE LP 32.0s total, solver 18.3s, my-overhead 13.7s (gurobi, persistent). Frontier runtime ~ total x evals.
+  [solve timing] STEADY-STATE LP 30.2s total, solver 18.0s, my-overhead 12.2s (gurobi, persistent). Frontier runtime ~ total x evals.
+  [solve timing] STEADY-STATE LP 34.3s total, solver 20.1s, my-overhead 14.2s (gurobi, persistent). Frontier runtime ~ total x evals.
+  [solve timing] STEADY-STATE LP 35.1s total, solver 20.3s, my-overhead 14.8s (gurobi, persistent). Frontier runtime ~ total x evals.
+  [SLOW SOLVE #1] LP took 34s (> 30s, gurobi).
+  [SLOW SOLVE #1] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #1] LP took 33s (> 30s, gurobi).
+  [SLOW SOLVE #1] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #2] LP took 37s (> 30s, gurobi).
+  [SLOW SOLVE #2] LP took 36s (> 30s, gurobi).
+  [SLOW SOLVE #2] LP took 37s (> 30s, gurobi).
+  [SLOW SOLVE #2] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #3] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #3] LP took 36s (> 30s, gurobi).
+  [SLOW SOLVE #3] LP took 36s (> 30s, gurobi).
+  [SLOW SOLVE #3] LP took 38s (> 30s, gurobi).
+  [gen 2] dispatching 24/24 evals to 4 worker processes (countevals=24, cache_hits=0)
+  [gen 3] dispatching 24/24 evals to 4 worker processes (countevals=48, cache_hits=0)
+  [gen 4] dispatching 24/24 evals to 4 worker processes (countevals=72, cache_hits=0)
+  [gen 5] dispatching 24/24 evals to 4 worker processes (countevals=96, cache_hits=0)
+  [gen 6] dispatching 24/24 evals to 4 worker processes (countevals=120, cache_hits=0)
+  [gen 7] dispatching 24/24 evals to 4 worker processes (countevals=144, cache_hits=0)
+  [gen 8] dispatching 24/24 evals to 4 worker processes (countevals=168, cache_hits=0)
+  [gen 9] dispatching 24/24 evals to 4 worker processes (countevals=192, cache_hits=0)
+  [gen 10] dispatching 24/24 evals to 4 worker processes (countevals=216, cache_hits=0)
+  [gen 11] dispatching 24/24 evals to 4 worker processes (countevals=240, cache_hits=0)
+  [gen 12] dispatching 24/24 evals to 4 worker processes (countevals=264, cache_hits=0)
+  [gen 13] dispatching 24/24 evals to 4 worker processes (countevals=288, cache_hits=0)
+  [gen 14] dispatching 24/24 evals to 4 worker processes (countevals=312, cache_hits=0)
+  [gen 15] dispatching 24/24 evals to 4 worker processes (countevals=336, cache_hits=0)
+  [gen 16] dispatching 24/24 evals to 4 worker processes (countevals=360, cache_hits=0)
+  [gen 17] dispatching 24/24 evals to 4 worker processes (countevals=384, cache_hits=0)
+  [SLOW SOLVE #100] LP took 35s (> 30s, gurobi).
+  [gen 18] dispatching 24/24 evals to 4 worker processes (countevals=408, cache_hits=0)
+  [SLOW SOLVE #100] LP took 46s (> 30s, gurobi).
+  [SLOW SOLVE #100] LP took 38s (> 30s, gurobi).
+  [SLOW SOLVE #100] LP took 38s (> 30s, gurobi).
+  [gen 19] dispatching 24/24 evals to 4 worker processes (countevals=432, cache_hits=0)
+  [gen 20] dispatching 24/24 evals to 4 worker processes (countevals=456, cache_hits=0)
+  [gen 21] dispatching 24/24 evals to 4 worker processes (countevals=480, cache_hits=0)
+  [gen 22] dispatching 24/24 evals to 4 worker processes (countevals=504, cache_hits=0)
+  [gen 23] dispatching 24/24 evals to 4 worker processes (countevals=528, cache_hits=0)
+  [gen 24] dispatching 24/24 evals to 4 worker processes (countevals=552, cache_hits=0)
+  [gen 25] dispatching 24/24 evals to 4 worker processes (countevals=576, cache_hits=0)
+  [gen 26] dispatching 24/24 evals to 4 worker processes (countevals=600, cache_hits=0)
+  [gen 27] dispatching 24/24 evals to 4 worker processes (countevals=624, cache_hits=0)
+  [gen 28] dispatching 24/24 evals to 4 worker processes (countevals=648, cache_hits=0)
+  [gen 29] dispatching 24/24 evals to 4 worker processes (countevals=672, cache_hits=0)
+  [gen 30] dispatching 24/24 evals to 4 worker processes (countevals=696, cache_hits=0)
+  [gen 31] dispatching 24/24 evals to 4 worker processes (countevals=720, cache_hits=0)
+  [gen 32] dispatching 24/24 evals to 4 worker processes (countevals=744, cache_hits=0)
+  [gen 33] dispatching 24/24 evals to 4 worker processes (countevals=768, cache_hits=0)
+  [gen 34] dispatching 24/24 evals to 4 worker processes (countevals=792, cache_hits=0)
+  [SLOW SOLVE #200] LP took 37s (> 30s, gurobi).
+  [gen 35] dispatching 24/24 evals to 4 worker processes (countevals=816, cache_hits=0)
+  [SLOW SOLVE #200] LP took 34s (> 30s, gurobi).
+  [SLOW SOLVE #200] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #200] LP took 43s (> 30s, gurobi).
+  [gen 36] dispatching 24/24 evals to 4 worker processes (countevals=840, cache_hits=0)
+  [gen 37] dispatching 24/24 evals to 4 worker processes (countevals=864, cache_hits=0)
+  [gen 38] dispatching 24/24 evals to 4 worker processes (countevals=888, cache_hits=0)
+  [gen 39] dispatching 24/24 evals to 4 worker processes (countevals=912, cache_hits=0)
+  [gen 40] dispatching 24/24 evals to 4 worker processes (countevals=936, cache_hits=0)
+  [gen 41] dispatching 24/24 evals to 4 worker processes (countevals=960, cache_hits=0)
+  [gen 42] dispatching 24/24 evals to 4 worker processes (countevals=984, cache_hits=0)
+  [gen 43] dispatching 24/24 evals to 4 worker processes (countevals=1008, cache_hits=0)
+  [gen 44] dispatching 24/24 evals to 4 worker processes (countevals=1032, cache_hits=0)
+  [gen 45] dispatching 24/24 evals to 4 worker processes (countevals=1056, cache_hits=0)
+  [gen 46] dispatching 24/24 evals to 4 worker processes (countevals=1080, cache_hits=0)
+  [gen 47] dispatching 24/24 evals to 4 worker processes (countevals=1104, cache_hits=0)
+  [gen 48] dispatching 24/24 evals to 4 worker processes (countevals=1128, cache_hits=0)
+  [gen 49] dispatching 24/24 evals to 4 worker processes (countevals=1152, cache_hits=0)
+  [gen 50] dispatching 24/24 evals to 4 worker processes (countevals=1176, cache_hits=0)
+  [gen 51] dispatching 24/24 evals to 4 worker processes (countevals=1200, cache_hits=0)
+  [gen 52] dispatching 24/24 evals to 4 worker processes (countevals=1224, cache_hits=0)
+  [SLOW SOLVE #300] LP took 34s (> 30s, gurobi).
+  [SLOW SOLVE #300] LP took 43s (> 30s, gurobi).
+  [SLOW SOLVE #300] LP took 38s (> 30s, gurobi).
+  [gen 53] dispatching 24/24 evals to 4 worker processes (countevals=1248, cache_hits=0)
+  [SLOW SOLVE #300] LP took 40s (> 30s, gurobi).
+  [gen 54] dispatching 24/24 evals to 4 worker processes (countevals=1272, cache_hits=0)
+  [gen 55] dispatching 24/24 evals to 4 worker processes (countevals=1296, cache_hits=0)
+  [gen 56] dispatching 24/24 evals to 4 worker processes (countevals=1320, cache_hits=0)
+  [gen 57] dispatching 24/24 evals to 4 worker processes (countevals=1344, cache_hits=0)
+  [gen 58] dispatching 24/24 evals to 4 worker processes (countevals=1368, cache_hits=0)
+  [gen 59] dispatching 24/24 evals to 4 worker processes (countevals=1392, cache_hits=0)
+  [gen 60] dispatching 24/24 evals to 4 worker processes (countevals=1416, cache_hits=0)
+  [gen 61] dispatching 24/24 evals to 4 worker processes (countevals=1440, cache_hits=0)
+  [gen 62] dispatching 24/24 evals to 4 worker processes (countevals=1464, cache_hits=0)
+  [gen 63] dispatching 24/24 evals to 4 worker processes (countevals=1488, cache_hits=0)
+  [gen 64] dispatching 24/24 evals to 4 worker processes (countevals=1512, cache_hits=0)
+  [gen 65] dispatching 24/24 evals to 4 worker processes (countevals=1536, cache_hits=0)
+  [gen 66] dispatching 24/24 evals to 4 worker processes (countevals=1560, cache_hits=0)
+  [gen 67] dispatching 24/24 evals to 4 worker processes (countevals=1584, cache_hits=0)
+  [gen 68] dispatching 24/24 evals to 4 worker processes (countevals=1608, cache_hits=0)
+  [gen 69] dispatching 24/24 evals to 4 worker processes (countevals=1632, cache_hits=0)
+  [gen 70] dispatching 24/24 evals to 4 worker processes (countevals=1656, cache_hits=0)
+  [SLOW SOLVE #400] LP took 37s (> 30s, gurobi).
+  [gen 71] dispatching 24/24 evals to 4 worker processes (countevals=1680, cache_hits=0)
+  [SLOW SOLVE #400] LP took 36s (> 30s, gurobi).
+  [SLOW SOLVE #400] LP took 39s (> 30s, gurobi).
+  [gen 72] dispatching 24/24 evals to 4 worker processes (countevals=1704, cache_hits=0)
+  [SLOW SOLVE #400] LP took 37s (> 30s, gurobi).
+  [gen 73] dispatching 24/24 evals to 4 worker processes (countevals=1728, cache_hits=0)
+  [gen 74] dispatching 24/24 evals to 4 worker processes (countevals=1752, cache_hits=0)
+  [gen 75] dispatching 24/24 evals to 4 worker processes (countevals=1776, cache_hits=0)
+  [gen 76] dispatching 24/24 evals to 4 worker processes (countevals=1800, cache_hits=0)
+  [gen 77] dispatching 24/24 evals to 4 worker processes (countevals=1824, cache_hits=0)
+  [gen 78] dispatching 24/24 evals to 4 worker processes (countevals=1848, cache_hits=0)
+  [gen 79] dispatching 24/24 evals to 4 worker processes (countevals=1872, cache_hits=0)
+  [gen 80] dispatching 24/24 evals to 4 worker processes (countevals=1896, cache_hits=0)
+  [gen 81] dispatching 24/24 evals to 4 worker processes (countevals=1920, cache_hits=0)
+  [gen 82] dispatching 24/24 evals to 4 worker processes (countevals=1944, cache_hits=0)
+  [gen 83] dispatching 24/24 evals to 4 worker processes (countevals=1968, cache_hits=0)
+  [gen 84] dispatching 24/24 evals to 4 worker processes (countevals=1992, cache_hits=0)
+    Found: sto_mw=33,924, dsm_mw=15,976, sto_cz_mw=825, dsm_cz_mw=1,988, sto_dk_mw=938, dsm_dk_mw=1,954, sto_at_mw=3,580, dsm_at_mw=363, sto_nl_mw=29,864, dsm_nl_mw=1,743, ntc_de_cz_mw=83, ntc_de_dk_mw=145, ntc_de_at_mw=153, ntc_de_nl_mw=92, ntc_dk_nl_mw=114, ntc_cz_at_mw=31, ntc_total_de_cz_mw=2,683, ntc_total_de_dk_mw=4,245, ntc_total_de_at_mw=7,653, ntc_total_de_nl_mw=5,092, ntc_total_dk_nl_mw=814, ntc_total_cz_at_mw=931
+    DE: VF_pv=0.6578, VF_wind_on=0.9841, VF_wind_off=0.9785
+    CZ: VF_pv=0.6672, VF_wind_on=1.0576, VF_wind_off=0.0000
+    DK: VF_pv=0.6778, VF_wind_on=0.8322, VF_wind_off=0.8969
+    AT: VF_pv=0.6963, VF_wind_on=0.9774, VF_wind_off=0.0000
+    NL: VF_pv=0.6605, VF_wind_on=1.0007, VF_wind_off=1.0137
+    Target VF_min=0.6578, Premium=0.422 bn EUR (vs B_opt)
+    LP solves: 2016, Time: 18967.3s
+    ** CMA: 2016/2000 evals [BUDGET EXHAUSTED] [4 workers] — raise max_evals to improve
+
+  TOTAL LP SOLVES: 1891
+
+  MARGINAL COSTS (dPremium/dVF):
+    VF 0.575 -> 0.658: +0.05 bn EUR per 0.01 VF = +5.08 bn EUR per 1.0 VF
+  [restart 2] VF_min=0.7002, premium=0.422 bn, penalised=7.9353e+10
+
+  ===== Restart 3/3 (seed=44) =====
+  Solver: Gurobi (APPSI persistent)
+  CZ: high-VRE node (ratio=2.0×), full 4D outer search (sto/P2G/DSM/EV)
+  DK: high-VRE node (ratio=15.9×), full 4D outer search (sto/P2G/DSM/EV)
+  AT: high-VRE node (ratio=6.3×), full 4D outer search (sto/P2G/DSM/EV)
+  NL: high-VRE node (ratio=5.7×), full 4D outer search (sto/P2G/DSM/EV)
+  NTC DE_CZ: outer search dim, fixed=2.6 GW, investable up to +3.0 GW (max total=5.6 GW)
+  NTC DE_DK: outer search dim, fixed=4.1 GW, investable up to +5.0 GW (max total=9.1 GW)
+  NTC DE_AT: outer search dim, fixed=7.5 GW, investable up to +4.0 GW (max total=11.5 GW)
+  NTC DE_NL: outer search dim, fixed=5.0 GW, investable up to +3.0 GW (max total=8.0 GW)
+  NTC DK_NL: outer search dim, fixed=0.7 GW, investable up to +2.0 GW (max total=2.7 GW)
+  NTC CZ_AT: outer search dim, fixed=0.9 GW, investable up to +1.5 GW (max total=2.4 GW)
+  Total outer search dimensions: 16
+  DE VRE fixed [GW]: PV=390.3, Won=168.5, Woff=62.9
+  CZ VRE fixed [GW]: PV=18.2, Won=3.4, Woff=0.0
+  DK VRE fixed [GW]: PV=35.5, Won=12.5, Woff=28.2
+  AT VRE fixed [GW]: PV=52.0, Won=32.9, Woff=0.0
+  NL VRE fixed [GW]: PV=86.9, Won=15.1, Woff=38.0
+  Min feasible P2G (DE) for H2: 20,361 MW
+  Min feasible DK P2G for H2: 10,300 MW
+  P2G ENDOGENOUS: K_sc LP-chosen at ['DE', 'CZ', 'DK', 'AT', 'NL'] (floored by H2 quota); sc dims removed from outer search
+  [solve timing] baseline B_opt LP 121.8s (gurobi, persistent); ~1-5 s on Gurobi.
+
+  COST-OPTIMAL BASELINE B_opt (VRE fixed, flexibility LP-optimal):
+    System cost:  78.931 bn EUR
+    DE: CR_pv=1.092(VF=0.601), CR_wind_on=0.999(VF=0.994), CR_wind_off=1.193(VF=0.993)
+    CZ: CR_pv=1.512(VF=0.611), CR_wind_on=1.360(VF=1.063), CR_wind_off=0.000(VF=0.000)
+    DK: CR_pv=0.850(VF=0.638), CR_wind_on=0.687(VF=0.843), CR_wind_off=0.735(VF=0.902)
+    AT: CR_pv=1.443(VF=0.650), CR_wind_on=1.185(VF=0.992), CR_wind_off=0.000(VF=0.000)
+    NL: CR_pv=1.225(VF=0.575), CR_wind_on=1.054(VF=1.017), CR_wind_off=1.038(VF=1.025)
+    Optimization target = VF_min = 0.5748
+    (CR_min=0.6871, VF_min=0.5748; both always reported)
+
+  --- Target VF_min >= 0.657 ---
+  [process mode] Spawning 4 worker processes (each builds its own LPOracle, ~30-60 s × 4 one-time)...
+  [gen 1] dispatching 24/24 evals to 4 worker processes (countevals=0, cache_hits=0)
+  [solve timing] first eval LP 68.4s (gurobi; incl. ONE-TIME persistent build -- later solves are faster).
+  [solve timing] first eval LP 75.0s (gurobi; incl. ONE-TIME persistent build -- later solves are faster).
+  [solve timing] first eval LP 73.8s (gurobi; incl. ONE-TIME persistent build -- later solves are faster).
+  [solve timing] first eval LP 73.0s (gurobi; incl. ONE-TIME persistent build -- later solves are faster).
+  [solve timing] STEADY-STATE LP 35.8s total, solver 20.8s, my-overhead 14.9s (gurobi, persistent). Frontier runtime ~ total x evals.
+  [solve timing] STEADY-STATE LP 35.8s total, solver 20.4s, my-overhead 15.4s (gurobi, persistent). Frontier runtime ~ total x evals.
+  [solve timing] STEADY-STATE LP 34.5s total, solver 19.6s, my-overhead 15.0s (gurobi, persistent). Frontier runtime ~ total x evals.
+  [solve timing] STEADY-STATE LP 32.5s total, solver 19.3s, my-overhead 13.2s (gurobi, persistent). Frontier runtime ~ total x evals.
+  [SLOW SOLVE #1] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #1] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #1] LP took 34s (> 30s, gurobi).
+  [SLOW SOLVE #1] LP took 36s (> 30s, gurobi).
+  [SLOW SOLVE #2] LP took 30s (> 30s, gurobi).
+  [SLOW SOLVE #2] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #2] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #2] LP took 34s (> 30s, gurobi).
+  [SLOW SOLVE #3] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #3] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #3] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #3] LP took 35s (> 30s, gurobi).
+  [gen 2] dispatching 24/24 evals to 4 worker processes (countevals=24, cache_hits=0)
+  [gen 3] dispatching 24/24 evals to 4 worker processes (countevals=48, cache_hits=0)
+  [gen 4] dispatching 24/24 evals to 4 worker processes (countevals=72, cache_hits=0)
+  [gen 5] dispatching 24/24 evals to 4 worker processes (countevals=96, cache_hits=0)
+  [gen 6] dispatching 24/24 evals to 4 worker processes (countevals=120, cache_hits=0)
+  [gen 7] dispatching 24/24 evals to 4 worker processes (countevals=144, cache_hits=0)
+  [gen 8] dispatching 24/24 evals to 4 worker processes (countevals=168, cache_hits=0)
+  [gen 9] dispatching 24/24 evals to 4 worker processes (countevals=192, cache_hits=0)
+  [gen 10] dispatching 24/24 evals to 4 worker processes (countevals=216, cache_hits=0)
+  [gen 11] dispatching 24/24 evals to 4 worker processes (countevals=240, cache_hits=0)
+  [gen 12] dispatching 24/24 evals to 4 worker processes (countevals=264, cache_hits=0)
+  [gen 13] dispatching 24/24 evals to 4 worker processes (countevals=288, cache_hits=0)
+  [gen 14] dispatching 24/24 evals to 4 worker processes (countevals=312, cache_hits=0)
+  [gen 15] dispatching 24/24 evals to 4 worker processes (countevals=336, cache_hits=0)
+  [gen 16] dispatching 24/24 evals to 4 worker processes (countevals=360, cache_hits=0)
+  [gen 17] dispatching 24/24 evals to 4 worker processes (countevals=384, cache_hits=0)
+  [SLOW SOLVE #100] LP took 35s (> 30s, gurobi).
+  [SLOW SOLVE #100] LP took 34s (> 30s, gurobi).
+  [gen 18] dispatching 24/24 evals to 4 worker processes (countevals=408, cache_hits=0)
+  [SLOW SOLVE #100] LP took 36s (> 30s, gurobi).
+  [SLOW SOLVE #100] LP took 37s (> 30s, gurobi).
+  [gen 19] dispatching 24/24 evals to 4 worker processes (countevals=432, cache_hits=0)
+  [gen 20] dispatching 24/24 evals to 4 worker processes (countevals=456, cache_hits=0)
+  [gen 21] dispatching 24/24 evals to 4 worker processes (countevals=480, cache_hits=0)
+  [gen 22] dispatching 24/24 evals to 4 worker processes (countevals=504, cache_hits=0)
+  [gen 23] dispatching 24/24 evals to 4 worker processes (countevals=528, cache_hits=0)
+  [gen 24] dispatching 24/24 evals to 4 worker processes (countevals=552, cache_hits=0)
+  [gen 25] dispatching 24/24 evals to 4 worker processes (countevals=576, cache_hits=0)
+  [gen 26] dispatching 24/24 evals to 4 worker processes (countevals=600, cache_hits=0)
+  [gen 27] dispatching 24/24 evals to 4 worker processes (countevals=624, cache_hits=0)
+  [gen 28] dispatching 24/24 evals to 4 worker processes (countevals=648, cache_hits=0)
+  [gen 29] dispatching 24/24 evals to 4 worker processes (countevals=672, cache_hits=0)
+  [gen 30] dispatching 24/24 evals to 4 worker processes (countevals=696, cache_hits=0)
+  [gen 31] dispatching 24/24 evals to 4 worker processes (countevals=720, cache_hits=0)
+  [gen 32] dispatching 24/24 evals to 4 worker processes (countevals=744, cache_hits=0)
+  [gen 33] dispatching 24/24 evals to 4 worker processes (countevals=768, cache_hits=0)
+  [gen 34] dispatching 24/24 evals to 4 worker processes (countevals=792, cache_hits=0)
+  [SLOW SOLVE #200] LP took 35s (> 30s, gurobi).
+  [gen 35] dispatching 24/24 evals to 4 worker processes (countevals=816, cache_hits=0)
+  [SLOW SOLVE #200] LP took 34s (> 30s, gurobi).
+  [SLOW SOLVE #200] LP took 34s (> 30s, gurobi).
+  [SLOW SOLVE #200] LP took 37s (> 30s, gurobi).
+  [gen 36] dispatching 24/24 evals to 4 worker processes (countevals=840, cache_hits=0)
+  [gen 37] dispatching 24/24 evals to 4 worker processes (countevals=864, cache_hits=0)
+  [gen 38] dispatching 24/24 evals to 4 worker processes (countevals=888, cache_hits=0)
+  [gen 39] dispatching 24/24 evals to 4 worker processes (countevals=912, cache_hits=0)
+  [gen 40] dispatching 24/24 evals to 4 worker processes (countevals=936, cache_hits=0)
+  [gen 41] dispatching 24/24 evals to 4 worker processes (countevals=960, cache_hits=0)
+  [gen 42] dispatching 24/24 evals to 4 worker processes (countevals=984, cache_hits=0)
+  [gen 43] dispatching 24/24 evals to 4 worker processes (countevals=1008, cache_hits=0)
+  [gen 44] dispatching 24/24 evals to 4 worker processes (countevals=1032, cache_hits=0)
+  [gen 45] dispatching 24/24 evals to 4 worker processes (countevals=1056, cache_hits=0)
+  [gen 46] dispatching 24/24 evals to 4 worker processes (countevals=1080, cache_hits=0)
+  [gen 47] dispatching 24/24 evals to 4 worker processes (countevals=1104, cache_hits=0)
+  [gen 48] dispatching 24/24 evals to 4 worker processes (countevals=1128, cache_hits=0)
+  [gen 49] dispatching 24/24 evals to 4 worker processes (countevals=1152, cache_hits=0)
+  [gen 50] dispatching 24/24 evals to 4 worker processes (countevals=1176, cache_hits=0)
+  [gen 51] dispatching 24/24 evals to 4 worker processes (countevals=1200, cache_hits=0)
+  [gen 52] dispatching 24/24 evals to 4 worker processes (countevals=1224, cache_hits=0)
+  [SLOW SOLVE #300] LP took 36s (> 30s, gurobi).
+  [SLOW SOLVE #300] LP took 38s (> 30s, gurobi).
+  [gen 53] dispatching 24/24 evals to 4 worker processes (countevals=1248, cache_hits=0)
+  [SLOW SOLVE #300] LP took 35s (> 30s, gurobi).
+  [gen 54] dispatching 24/24 evals to 4 worker processes (countevals=1272, cache_hits=0)
+  [SLOW SOLVE #300] LP took 40s (> 30s, gurobi).
+  [gen 55] dispatching 24/24 evals to 4 worker processes (countevals=1296, cache_hits=0)
+  [gen 56] dispatching 24/24 evals to 4 worker processes (countevals=1320, cache_hits=0)
+  [gen 57] dispatching 24/24 evals to 4 worker processes (countevals=1344, cache_hits=0)
+  [gen 58] dispatching 24/24 evals to 4 worker processes (countevals=1368, cache_hits=0)
+  [gen 59] dispatching 24/24 evals to 4 worker processes (countevals=1392, cache_hits=0)
+  [gen 60] dispatching 24/24 evals to 4 worker processes (countevals=1416, cache_hits=0)
+  [gen 61] dispatching 24/24 evals to 4 worker processes (countevals=1440, cache_hits=0)
+  [gen 62] dispatching 24/24 evals to 4 worker processes (countevals=1464, cache_hits=0)
+  [gen 63] dispatching 24/24 evals to 4 worker processes (countevals=1488, cache_hits=0)
+  [gen 64] dispatching 24/24 evals to 4 worker processes (countevals=1512, cache_hits=0)
+  [gen 65] dispatching 24/24 evals to 4 worker processes (countevals=1536, cache_hits=0)
+  [gen 66] dispatching 24/24 evals to 4 worker processes (countevals=1560, cache_hits=0)
+  [gen 67] dispatching 24/24 evals to 4 worker processes (countevals=1584, cache_hits=0)
+  [gen 68] dispatching 24/24 evals to 4 worker processes (countevals=1608, cache_hits=0)
+  [gen 69] dispatching 24/24 evals to 4 worker processes (countevals=1632, cache_hits=0)
+  [gen 70] dispatching 24/24 evals to 4 worker processes (countevals=1656, cache_hits=0)
+  [SLOW SOLVE #400] LP took 34s (> 30s, gurobi).
+  [gen 71] dispatching 24/24 evals to 4 worker processes (countevals=1680, cache_hits=0)
+  [SLOW SOLVE #400] LP took 54s (> 30s, gurobi).
+  [gen 72] dispatching 24/24 evals to 4 worker processes (countevals=1704, cache_hits=0)
+  [SLOW SOLVE #400] LP took 36s (> 30s, gurobi).
+  [gen 73] dispatching 24/24 evals to 4 worker processes (countevals=1728, cache_hits=0)
+  [SLOW SOLVE #400] LP took 37s (> 30s, gurobi).
+  [gen 74] dispatching 24/24 evals to 4 worker processes (countevals=1752, cache_hits=0)
+  [gen 75] dispatching 24/24 evals to 4 worker processes (countevals=1776, cache_hits=0)
+  [gen 76] dispatching 24/24 evals to 4 worker processes (countevals=1800, cache_hits=0)
+  [gen 77] dispatching 24/24 evals to 4 worker processes (countevals=1824, cache_hits=0)
+  [gen 78] dispatching 24/24 evals to 4 worker processes (countevals=1848, cache_hits=0)
+  [gen 79] dispatching 24/24 evals to 4 worker processes (countevals=1872, cache_hits=0)
+  [gen 80] dispatching 24/24 evals to 4 worker processes (countevals=1896, cache_hits=0)
+  [gen 81] dispatching 24/24 evals to 4 worker processes (countevals=1920, cache_hits=0)
+  [gen 82] dispatching 24/24 evals to 4 worker processes (countevals=1944, cache_hits=0)
+  [gen 83] dispatching 24/24 evals to 4 worker processes (countevals=1968, cache_hits=0)
+  [gen 84] dispatching 24/24 evals to 4 worker processes (countevals=1992, cache_hits=0)
+    Found: sto_mw=33,517, dsm_mw=15,755, sto_cz_mw=1,847, dsm_cz_mw=681, sto_dk_mw=2,667, dsm_dk_mw=460, sto_at_mw=3,402, dsm_at_mw=813, sto_nl_mw=27,676, dsm_nl_mw=2,931, ntc_de_cz_mw=40, ntc_de_dk_mw=252, ntc_de_at_mw=54, ntc_de_nl_mw=207, ntc_dk_nl_mw=11, ntc_cz_at_mw=10, ntc_total_de_cz_mw=2,640, ntc_total_de_dk_mw=4,352, ntc_total_de_at_mw=7,554, ntc_total_de_nl_mw=5,207, ntc_total_dk_nl_mw=711, ntc_total_cz_at_mw=910
+    DE: VF_pv=0.6577, VF_wind_on=0.9845, VF_wind_off=0.9790
+    CZ: VF_pv=0.6675, VF_wind_on=1.0550, VF_wind_off=0.0000
+    DK: VF_pv=0.6882, VF_wind_on=0.8272, VF_wind_off=0.8956
+    AT: VF_pv=0.6974, VF_wind_on=0.9764, VF_wind_off=0.0000
+    NL: VF_pv=0.6576, VF_wind_on=1.0015, VF_wind_off=1.0138
+    Target VF_min=0.6576, Premium=0.400 bn EUR (vs B_opt)
+    LP solves: 2016, Time: 19091.2s
+    ** CMA: 2016/2000 evals [BUDGET EXHAUSTED] [4 workers] — raise max_evals to improve
+
+  TOTAL LP SOLVES: 1918
+
+  MARGINAL COSTS (dPremium/dVF):
+    VF 0.575 -> 0.658: +0.05 bn EUR per 0.01 VF = +4.83 bn EUR per 1.0 VF
+  [restart 3] VF_min=0.6971, premium=0.400 bn, penalised=7.9331e+10
+
+  Diagnostic target VF*=0.657 complete in 57405.8s (956.8 min, 15.95 h)
+
+  === DIAGNOSTIC RESULT ===
+  Rows in result: 2
+  Achieved VF_min = 0.6576 (target 0.657)
+  Premium = 0.400 bn EUR
+  Binding pair: NL pv, VF=0.6576
+  Runner-up:    DE pv, VF=0.6577
+
+  Sensitivity result written: <project>\python verze\output\sensitivity\sensitivity_vf0.657_rob_cy2003_tfall.xlsx
+
+============================================================
+  TOTAL WALL-CLOCK TIME: 57431.4 s (957.2 min, 15.95 h)
+============================================================

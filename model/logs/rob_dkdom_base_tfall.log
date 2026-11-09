@@ -1,0 +1,107 @@
+============================================================
+  DIRECTED SEARCH v11 (CMA-ES, 5-node (DE+CZ+DK+AT+NL))
+============================================================
+
+[1/5] Loading data (12 representative weeks, nodes=['DE', 'CZ', 'DK', 'AT', 'NL'])...
+  Loading time series from <project>\time_series.xlsx...
+  Nodes: ['DE', 'CZ', 'DK', 'AT', 'NL']
+  PECD climate year 2009: VRE CF replaced (PV/onshore/offshore) for ['DE', 'CZ', 'DK', 'AT', 'NL']; demand shape replaced for ['DE', 'CZ', 'DK', 'AT', 'NL']
+  Clustering 52 weeks into 12 representative weeks (k-medoids)...
+  Cluster sizes: [8, 3, 1, 3, 1, 5, 8, 10, 2, 3, 6, 2] (total=52 weeks)
+  Total weighted hours: 8736 (real: 8760)
+    Week 0: medoid=week 4, size=8, demand=70,121 MW, PV=0.051, Wind=0.301
+    Week 1: medoid=week 5, size=3, demand=68,425 MW, PV=0.046, Wind=0.300
+    Week 2: medoid=week 8, size=1, demand=66,716 MW, PV=0.061, Wind=0.293
+    Week 3: medoid=week 12, size=3, demand=59,603 MW, PV=0.117, Wind=0.251
+    Week 4: medoid=week 17, size=1, demand=59,651 MW, PV=0.142, Wind=0.227
+    Week 5: medoid=week 19, size=5, demand=60,507 MW, PV=0.161, Wind=0.172
+    Week 6: medoid=week 31, size=8, demand=59,593 MW, PV=0.149, Wind=0.132
+    Week 7: medoid=week 32, size=10, demand=60,095 MW, PV=0.166, Wind=0.154
+    Week 8: medoid=week 41, size=2, demand=65,490 MW, PV=0.067, Wind=0.304
+    Week 9: medoid=week 43, size=3, demand=62,600 MW, PV=0.043, Wind=0.244
+    Week 10: medoid=week 44, size=6, demand=66,707 MW, PV=0.033, Wind=0.221
+    Week 11: medoid=week 51, size=2, demand=57,985 MW, PV=0.021, Wind=0.403
+  DK H2 quota: 5.0 TWh/yr (Tier 1 #1)
+  DK residual interconnection: 5450 MW to Nordic (NO+SE+UK)
+  AT residual interconnection: 2075 MW to Alpine (CH+IT)
+  NL residual interconnection: 5100 MW to BE+NO+UK
+  Transmission: DE_CZ link, NTC=2600 MW (fixed)
+  Transmission: DE_DK link, NTC=4100 MW (fixed)
+  Transmission: DE_AT link, NTC=7500 MW (fixed)
+  Transmission: DE_NL link, NTC=5000 MW (fixed)
+  Transmission: DK_NL link, NTC=700 MW (fixed)
+  Transmission: CZ_AT link, NTC=900 MW (fixed)
+  DE residual interconnection: 19800 MW to rest-of-Europe (investable to 32800; export 20 / import 75 EUR/MWh)
+  [scenario] Distributed Energy 2040 applied (corrected VRE incl RETE; DE PV=390 GW; tau=123.0; year-specific DEA costs)
+  ** TYNDP_FIXES=hubs,hydro,other,h2,gas,dsr,pots,fuel,oil,borders (de2040) **
+     hubs DE: wind_off 21.7 -> 62.9 GW (corr 0.98; hub CF 0.544 on rep. weeks vs node 0.481; TYNDP hub 195.7 TWh)
+     hubs DK: wind_off 14.2 -> 28.2 GW (corr 0.84; hub CF 0.595 on rep. weeks vs node 0.506; TYNDP hub 72.3 TWh)
+     hubs NL: wind_off 33.0 -> 38.0 GW (corr 0.90; hub CF 0.518 on rep. weeks vs node 0.412; TYNDP hub 23.5 TWh)
+     hydro DE: turbine 11.5 GW, pump 10.6 GW, energy 202 GWh, inflow 0.7 TWh
+     hydro CZ: turbine 1.9 GW, pump 1.3 GW, energy 94 GWh, inflow 1.0 TWh
+     hydro AT: turbine 12.5 GW, pump 7.9 GW, energy 2394 GWh, inflow 19.9 TWh
+     other DE: flat 3.32 GW (29.1 TWh)
+     other CZ: flat 0.47 GW (4.1 TWh)
+     other DK: flat 0.24 GW (2.1 TWh)
+     other AT: flat 0.61 GW (5.4 TWh)
+     other NL: flat 0.26 GW (2.3 TWh)
+     h2: H2 price 58.4 EUR/MWh_H2 -> 101 EUR/MWh_el; DE 25.4 GW, AT 3.3 GW, NL 9.7 GW
+     gas existing: DE 6.5+0.7 GW, CZ 2.5+0.1 GW, DK 0.0+0.6 GW, AT 0.0+0.0 GW, NL 3.5+0.4 GW
+     fuel: DE residual import price -> 84.8 EUR/MWh (= CCGT cost)
+     fuel: gas blend 10.44 EUR/GJ, fossil 35%; CCGT 76 -> 85, OCGT 113 -> 126 EUR/MWh (fuel+CO2)
+     dsr bands (de2040): 10%@60, 26%@110, 65%@300
+     dsr: DE 20.9 GW, AT 0.7 GW, NL 3.9 GW
+     oil: DK 0.75 GW @ 99 EUR/MWh fuel
+     borders DK: hourly TYNDP neighbour price, mean 46.2 EUR/MWh (rep. weeks 49.7)
+     borders AT: hourly TYNDP neighbour price, mean 58.4 EUR/MWh (rep. weeks 60.8)
+     borders NL: hourly TYNDP neighbour price, mean 51.1 EUR/MWh (rep. weeks 53.8)
+     borders DE: hourly TYNDP neighbour price, mean 52.0 EUR/MWh (rep. weeks 54.6)
+  [ev-2040] DE: K_ev=282.0 GW, E=3.2 TWh, drive=84.2 TWh/yr
+  [ev-2040] CZ: K_ev=18.4 GW, E=0.2 TWh, drive=6.3 TWh/yr
+  [ev-2040] DK: K_ev=15.2 GW, E=0.2 TWh, drive=7.1 TWh/yr
+  [ev-2040] AT: K_ev=35.5 GW, E=0.4 TWh, drive=9.5 TWh/yr
+  [ev-2040] NL: K_ev=47.5 GW, E=0.5 TWh, drive=19.1 TWh/yr
+
+  ** --demand-2040: scaling base demand to TYNDP DE2040 final-demand totals (S.61) **
+  [demand-2040] DE: 552.2 -> 855.5 TWh/yr (x1.549)
+  [demand-2040] CZ: 71.3 -> 91.7 TWh/yr (x1.287)
+  [demand-2040] DK: 43.5 -> 40.6 TWh/yr (x0.934)
+  [demand-2040] AT: 72.7 -> 117.0 TWh/yr (x1.610)
+  [demand-2040] NL: 137.7 -> 212.5 TWh/yr (x1.543)
+
+  ** --h2-2040: per-node H2 quota = TYNDP DE2040 electrolyser x eta (S.61) [TWh H2]: DE=118.6, CZ=3.6, DK=60.0, AT=25.5, NL=42.7 ** (DK is a TYNDP H2-export hub -> large flexible load)
+  ** H2 OVERRIDE: DK quota 60.0 -> 5.0 TWh H2 **
+
+  EV capacity cap: 40,000 MW (default)
+
+  H2 demand target: 20 TWh_H2 (active only when P2G > 0)
+
+[baseline-only] Solving cost-optimal B_opt and exiting...
+  Solver: Gurobi (APPSI persistent)
+  CZ: high-VRE node (ratio=2.0×), full 4D outer search (sto/P2G/DSM/EV)
+  DK: high-VRE node (ratio=16.1×), full 4D outer search (sto/P2G/DSM/EV)
+  AT: high-VRE node (ratio=6.3×), full 4D outer search (sto/P2G/DSM/EV)
+  NL: high-VRE node (ratio=5.7×), full 4D outer search (sto/P2G/DSM/EV)
+  NTC DE_CZ: outer search dim, fixed=2.6 GW, investable up to +3.0 GW (max total=5.6 GW)
+  NTC DE_DK: outer search dim, fixed=4.1 GW, investable up to +5.0 GW (max total=9.1 GW)
+  NTC DE_AT: outer search dim, fixed=7.5 GW, investable up to +4.0 GW (max total=11.5 GW)
+  NTC DE_NL: outer search dim, fixed=5.0 GW, investable up to +3.0 GW (max total=8.0 GW)
+  NTC DK_NL: outer search dim, fixed=0.7 GW, investable up to +2.0 GW (max total=2.7 GW)
+  NTC CZ_AT: outer search dim, fixed=0.9 GW, investable up to +1.5 GW (max total=2.4 GW)
+  Total outer search dimensions: 16
+  DE VRE fixed [GW]: PV=390.3, Won=168.5, Woff=62.9
+  CZ VRE fixed [GW]: PV=18.2, Won=3.4, Woff=0.0
+  DK VRE fixed [GW]: PV=35.5, Won=12.5, Woff=28.2
+  AT VRE fixed [GW]: PV=52.0, Won=32.9, Woff=0.0
+  NL VRE fixed [GW]: PV=86.9, Won=15.1, Woff=38.0
+  Min feasible P2G (DE) for H2: 20,361 MW
+  Min feasible DK P2G for H2: 859 MW
+  P2G ENDOGENOUS: K_sc LP-chosen at ['DE', 'CZ', 'DK', 'AT', 'NL'] (floored by H2 quota); sc dims removed from outer search
+  [solve timing] baseline B_opt LP 141.2s (gurobi, persistent); ~1-5 s on Gurobi.
+
+  B_opt cost 77.937 bn | VF_min 0.4597 | VF_genw 0.8038 | CR_min 0.3772
+    DE: VF_pv=0.586, VF_wind_on=0.997, VF_wind_off=0.911
+    CZ: VF_pv=0.626, VF_wind_on=1.092, VF_wind_off=0.000
+    DK: VF_pv=0.460, VF_wind_on=0.608, VF_wind_off=0.757
+    AT: VF_pv=0.644, VF_wind_on=1.043, VF_wind_off=0.000
+    NL: VF_pv=0.565, VF_wind_on=0.912, VF_wind_off=0.885

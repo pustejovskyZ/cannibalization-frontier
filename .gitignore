@@ -1,6 +1,20 @@
-# run outputs (results are added explicitly with the paper release)
-model/output/
-model/logs/
+# run outputs: ignored, except the results the paper is built from
+model/output/*
+!model/output/directed_search_frontier_5node_*_tfall.csv
+!model/output/grid_floor_5node_*_tfall.csv
+!model/output/node_factorial_de2040_bopt_tfall.csv
+!model/output/node_local_de2040_row*_tfall.csv
+!model/output/farside_de2040_*_tfall.csv
+!model/output/tyndp_battery_benchmark_final.csv
+!model/output/diagnostic_vf_*_tfall/
+model/output/diagnostic_vf_*_tfall/*
+!model/output/diagnostic_vf_*_tfall/diagnostic_frontier.csv
+!model/output/sensitivity/
+model/output/sensitivity/*
+!model/output/sensitivity/sensitivity_vf*_tfall.xlsx
+model/logs/*
+!model/logs/phase2_plan.json
+!model/logs/rob_*_tfall.log
 model/diagnostic_*/
 *.pkl
 paper/gen/*
